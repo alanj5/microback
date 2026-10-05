@@ -43,3 +43,12 @@ stack observations, not elapsed fractions or hardware counters. Linux perf evide
 remains unexecuted here. Clang 23 introduces a __COUNTER__ pedantic diagnostic in
 the Google Benchmark dependency; CMake suppresses only that dependency diagnostic
 on Clang >=23. Project warnings-as-errors stays enabled.
+
+## Measured result
+
+[Baseline](benchmarks/baseline/report.md) and [focused optimization](benchmarks/optimized/report.md)
+retain raw repeated results. At 100 levels, replacing copied depth scans with direct
+aggregate lookup reduced median execution-update CPU time from 1164.27 to 60.59
+ns/event (94.80%, 19.22x throughput). This workload has no strategy/history recording;
+it is not an end-to-end Python speed claim. Plain 10M binary replay baseline was
+63.71 ns/event versus CSV 233.70 ns/event. Figures are machine/workload observations.

@@ -192,7 +192,7 @@ research example without C++ edits. No future-fill labels in strategy-visible st
 
 ## Stage 8 — Data, binary IO and measured performance
 
-**Dependency:** Stage 7. **Status:** planned; split into focused gated sub-stages.
+**Dependency:** Stage 7. **Status:** complete locally; Linux perf unavailable on this host.
 
 The specification places real data before Python and research before performance;
 the request explicitly groups data/performance here and research last. This preserves
@@ -238,6 +238,8 @@ where supported; consistent workload and correctness across compared replay form
 **Commit:** `perf: establish reproducible replay benchmarks and profiles`.
 
 ### 8c — One justified optimisation
+
+**Status:** complete locally; repeated improvement and semantic equality verified.
 
 **Deliverables:** identify measured bottleneck, one focused implementation change,
 before/after benchmark report and percentage change with uncertainty/trade-offs.

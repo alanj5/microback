@@ -1,0 +1,173 @@
+Analysis of sampling microback_bench (pid 65217) every 1 millisecond
+Process:         microback_bench [65217]
+Path:            /Users/USER/Desktop/*/microback_bench
+Load Address:    0x102904000
+Identifier:      microback_bench
+Version:         0
+Code Type:       ARM64
+Platform:        macOS
+Parent Process:  bash [65212]
+Target Type:     live task
+
+Date/Time:       2026-10-05 19:14:48.670 +0100
+Launch Time:     2026-10-05 19:14:48.597 +0100
+OS Version:      macOS 26.5 (25F71)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+
+Physical footprint:         47.3M
+Physical footprint (peak):  47.3M
+Idle exit:                  untracked
+----
+
+Call graph:
+    3756 Thread_2490607   DispatchQueue_1: com.apple.main-thread  (serial)
+      3756 start  (in dyld) + 6992  [0x18ea5fe00]
+        3756 main  (in microback_bench) + 140  [0x10290664c]
+          3756 benchmark::RunSpecifiedBenchmarks()  (in microback_bench) + 92  [0x1029135cc]
+            3127 benchmark::RunSpecifiedBenchmarks(benchmark::BenchmarkReporter*, benchmark::BenchmarkReporter*, std::basic_string<char>)  (in microback_bench) + 2700  [0x1029140c0]
+            + 3127 benchmark::internal::BenchmarkRunner::DoOneRepetition()  (in microback_bench) + 156  [0x10292cd28]
+            +   3127 benchmark::internal::BenchmarkRunner::DoNIterations()  (in microback_bench) + 508  [0x10292bcc4]
+            +     3127 benchmark::internal::(anonymous namespace)::ThreadRunnerDefault::RunThreads(std::function<void (int)> const&)  (in microback_bench) + 148  [0x10292d590]
+            +       3127 benchmark::internal::(anonymous namespace)::RunInThread(benchmark::internal::BenchmarkInstance const*, long long, int, benchmark::internal::ThreadManager*, benchmark::internal::PerfCountersMeasurement*, benchmark::ProfilerManager*)  (in microback_bench) + 96  [0x10292c890]
+            +         3127 benchmark::internal::BenchmarkInstance::Run(long long, int, benchmark::internal::ThreadTimer*, benchmark::internal::ThreadManager*, benchmark::internal::PerfCountersMeasurement*, benchmark::ProfilerManager*) const  (in microback_bench) + 184  [0x1029191e4]
+            +           3063 (anonymous namespace)::execution(benchmark::State&)  (in microback_bench) + 192  [0x1029064c8]
+            +           ! 1131 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 124  [0x1029103e8]
+            +           ! : 752 microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench) + 392  [0x10290da64]
+            +           ! : | 354 microback::OrderBook::apply(microback::MarketEvent const&)  (in microback_bench) + 252  [0x10290d790]
+            +           ! : | + 354 microback::OrderBook::modify(microback::ModifyOrder const&)  (in microback_bench) + 1048,328,...  [0x1029093f0,0x102909120,...]
+            +           ! : | 176 microback::OrderBook::apply(microback::MarketEvent const&)  (in microback_bench) + 32  [0x10290d6b4]
+            +           ! : | + 176 microback::validate_event(microback::MarketEvent const&)  (in microback_bench) + 12,44,...  [0x10290ba28,0x10290ba48,...]
+            +           ! : | 103 microback::OrderBook::apply(microback::MarketEvent const&)  (in microback_bench) + 200  [0x10290d75c]
+            +           ! : | + 103 microback::OrderBook::find(microback::Integer<microback::OrderIdTag, unsigned long long>) const  (in microback_bench) + 56,20,...  [0x1029096c4,0x1029096a0,...]
+            +           ! : | 67 microback::OrderBook::apply(microback::MarketEvent const&)  (in microback_bench) + 44,200,...  [0x10290d6c0,0x10290d75c,...]
+            +           ! : | 26 microback::OrderBook::modify(microback::ModifyOrder const&)  (in microback_bench) + 1068,1064  [0x102909404,0x102909400]
+            +           ! : | 26 microback::validate_event(microback::MarketEvent const&)  (in microback_bench) + 240  [0x10290bb0c]
+            +           ! : 196 microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench) + 16,52,...  [0x10290d8ec,0x10290d910,...]
+            +           ! : 106 microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench) + 40  [0x10290d904]
+            +           ! : | 106 microback::validate_event(microback::MarketEvent const&)  (in microback_bench) + 44,12,...  [0x10290ba48,0x10290ba28,...]
+            +           ! : 32 microback::OrderBook::apply(microback::MarketEvent const&)  (in microback_bench) + 256  [0x10290d794]
+            +           ! : 22 microback::validate_event(microback::MarketEvent const&)  (in microback_bench) + 240  [0x10290bb0c]
+            +           ! : 12 microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench) + 356  [0x10290da40]
+            +           ! : | 12 microback::OrderBook::best_ask() const  (in microback_bench) + 0,12  [0x102909848,0x102909854]
+            +           ! : 10 microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench) + 316  [0x10290da18]
+            +           ! : | 10 microback::OrderBook::best_bid() const  (in microback_bench) + 12  [0x102909830]
+            +           ! : 1 microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench) + 136  [0x10290d964]
+            +           ! :   1 microback::OrderBook::apply(microback::MarketEvent const&)  (in microback_bench) + 376  [0x10290d80c]
+            +           ! :     1 microback::OrderBook::insert<std::map<microback::Integer<microback::PriceTag, long long>, microback::PriceLevel>>(std::map<microback::Integer<microback::PriceTag, long long>, microback::PriceLevel>&, microback::Order const&)  (in microback_bench) + 300  [0x102908cf8]
+            +           ! :       1 std::__hash_table<std::__hash_value_type<microback::Integer<microback::OrderIdTag, unsigned long long>, microback::OrderBook::OrderLocation>>::__emplace_unique[abi:nqe230102]<microback::Integer<microback::OrderIdTag, unsigned long long> const&, microback::OrderBook::OrderLocation>(microback::Integer<microback::OrderIdTag, unsigned long long> const&, microback::OrderBook::OrderLocation&&)::'lambda'(microback::Integer<microback::OrderIdTag, unsigned long long> const&, microback::Integer<microback::OrderIdTag, unsigned long long> const&, microback::OrderBook::OrderLocation&&)::operator()[abi:nqe230102](microback::Integer<microback::OrderIdTag, unsigned long long> const&, microback::Integer<microback::OrderIdTag, unsigned long long> const&, microback::OrderBook::OrderLocation&&) const  (in microback_bench) + 260  [0x10290b33c]
+            +           ! :         1 operator new(unsigned long)  (in libc++abi.dylib) + 52  [0x18edd47e8]
+            +           ! :           1 <deduplicated_symbol>  (in libsystem_malloc.dylib) + 0  [0x18ec3a0d4]
+            +           ! 628 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 736,756,...  [0x10291064c,0x102910660,...]
+            +           ! 391 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 648  [0x1029105f4]
+            +           ! : 391 microback::OrderBook::quantity_at(microback::Side, microback::Integer<microback::PriceTag, long long>) const  (in microback_bench) + 120,48,...  [0x102909a48,0x102909a00,...]
+            +           ! 333 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 892  [0x1029106e8]
+            +           ! : 333 microback::OrderBook::quantity_at(microback::Side, microback::Integer<microback::PriceTag, long long>) const  (in microback_bench) + 56,128,...  [0x102909a08,0x102909a50,...]
+            +           ! 167 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 684  [0x102910618]
+            +           ! : 167 microback::ExecutionEngine::cancellation_effect(std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, microback::ExecutionEngine::Cancellation)  (in microback_bench) + 80,108,...  [0x102910080,0x10291009c,...]
+            +           ! 130 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 552  [0x102910594]
+            +           ! : 130 microback::ExecutionEngine::passive_trade(microback::MarketEvent const&)  (in microback_bench) + 328,348,...  [0x10290ff24,0x10290ff38,...]
+            +           ! 92 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 100  [0x1029103d0]
+            +           ! : 92 microback::OrderBook::find(microback::Integer<microback::OrderIdTag, unsigned long long>) const  (in microback_bench) + 56,20,...  [0x1029096c4,0x1029096a0,...]
+            +           ! 39 microback::ExecutionEngine::process_until(microback::Integer<microback::TimestampTag, long long>, bool)  (in microback_bench) + 420  [0x10290fb64]
+            +           ! 38 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 72  [0x1029103b4]
+            +           ! : 38 microback::ExecutionEngine::process_until(microback::Integer<microback::TimestampTag, long long>, bool)  (in microback_bench) + 28,32,...  [0x10290f9dc,0x10290f9e0,...]
+            +           ! 37 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 924  [0x102910708]
+            +           ! : 37 microback::ExecutionEngine::process_until(microback::Integer<microback::TimestampTag, long long>, bool)  (in microback_bench) + 28,20,...  [0x10290f9dc,0x10290f9d4,...]
+            +           ! 35 microback::OrderBook::quantity_at(microback::Side, microback::Integer<microback::PriceTag, long long>) const  (in microback_bench) + 184,188  [0x102909a88,0x102909a8c]
+            +           ! 25 microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench) + 560  [0x10290db0c]
+            +           ! 8 microback::ExecutionEngine::cancellation_effect(std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, microback::ExecutionEngine::Cancellation)  (in microback_bench) + 752  [0x102910320]
+            +           ! 6 microback::ExecutionEngine::passive_trade(microback::MarketEvent const&)  (in microback_bench) + 520  [0x10290ffe4]
+            +           ! 2 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 804  [0x102910690]
+            +           ! : 1 DYLD-STUB$$operator new(unsigned long)  (in microback_bench) + 4  [0x10293da5c]
+            +           ! : 1 operator new(unsigned long)  (in libc++abi.dylib) + 52  [0x18edd47e8]
+            +           ! :   1 malloc_type_malloc  (in libsystem_malloc.dylib) + 72  [0x18ec2e02c]
+            +           ! 1 operator new(unsigned long)  (in libc++abi.dylib) + 80  [0x18edd4804]
+            +           45 microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench) + 952,956  [0x102910724,0x102910728]
+            +           17 (anonymous namespace)::execution(benchmark::State&)  (in microback_bench) + 68  [0x10290644c]
+            +           ! 17 (anonymous namespace)::stream((anonymous namespace)::Workload)  (in microback_bench) + 1264,1152,...  [0x1029072a0,0x102907230,...]
+            +           1 (anonymous namespace)::execution(benchmark::State&)  (in microback_bench) + 252  [0x102906504]
+            +           ! 1 microback::ExecutionEngine::~ExecutionEngine()  (in microback_bench) + 84  [0x10290750c]
+            +           !   1 std::__tree<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, std::__map_value_compare<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, std::pair<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>> const, long long>>>::__tree_deleter::operator()[abi:nqe230102](std::__tree_node<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, void*>*)  (in microback_bench) + 40  [0x102907630]
+            +           !     1 std::__tree<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, std::__map_value_compare<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, std::pair<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>> const, long long>>>::__tree_deleter::operator()[abi:nqe230102](std::__tree_node<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, void*>*)  (in microback_bench) + 40  [0x102907630]
+            +           !       1 std::__tree<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, std::__map_value_compare<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, std::pair<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>> const, long long>>>::__tree_deleter::operator()[abi:nqe230102](std::__tree_node<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, void*>*)  (in microback_bench) + 40  [0x102907630]
+            +           !         1 std::__tree<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, std::__map_value_compare<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, std::pair<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>> const, long long>>>::__tree_deleter::operator()[abi:nqe230102](std::__tree_node<std::__value_type<std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, long long>, void*>*)  (in microback_bench) + 76  [0x102907654]
+            +           1 (anonymous namespace)::execution(benchmark::State&)  (in microback_bench) + 192  [0x1029064c8]
+            628 benchmark::RunSpecifiedBenchmarks(benchmark::BenchmarkReporter*, benchmark::BenchmarkReporter*, std::basic_string<char>)  (in microback_bench) + 1216  [0x102913af4]
+            + 628 benchmark::BenchmarkReporter::Context::Context()  (in microback_bench) + 20  [0x102937e0c]
+            +   628 benchmark::CPUInfo::Get()  (in microback_bench) + 80  [0x10293b6e4]
+            +     628 benchmark::CPUInfo::CPUInfo()  (in microback_bench) + 1092,1100,...  [0x10293bb8c,0x10293bb94,...]
+            1 benchmark::RunSpecifiedBenchmarks(benchmark::BenchmarkReporter*, benchmark::BenchmarkReporter*, std::basic_string<char>)  (in microback_bench) + 1276  [0x102913b30]
+              1 benchmark::ConsoleReporter::ReportContext(benchmark::BenchmarkReporter::Context const&)  (in microback_bench) + 80  [0x1029316b0]
+                1 benchmark::BenchmarkReporter::PrintBasicContext(std::basic_ostream<char>*, benchmark::BenchmarkReporter::Context const&)  (in microback_bench) + 96  [0x102937920]
+                  1 benchmark::LocalDateTimeString()  (in microback_bench) + 88  [0x10293d38c]
+                    1 localtime_r  (in libsystem_c.dylib) + 52  [0x18ecb2ea4]
+                      1 tzsetwall_basic  (in libsystem_c.dylib) + 396  [0x18ecb3334]
+                        1 notify_register_tz  (in libsystem_c.dylib) + 308  [0x18ecb4a10]
+                          1 notify_register_check  (in libsystem_notify.dylib) + 0  [0x19325fb38]
+
+Total number in stack (recursive counted multiple, when >=5):
+
+Sort by top of stack, same collapsed (when >= 5):
+        microback::OrderBook::quantity_at(microback::Side, microback::Integer<microback::PriceTag, long long>) const  (in microback_bench)        759
+        microback::ExecutionEngine::on_market_event(microback::MarketEvent const&)  (in microback_bench)        673
+        benchmark::CPUInfo::CPUInfo()  (in microback_bench)        628
+        microback::OrderBook::modify(microback::ModifyOrder const&)  (in microback_bench)        380
+        microback::validate_event(microback::MarketEvent const&)  (in microback_bench)        330
+        microback::ReplayEngine::ingest(microback::MarketEvent const&)  (in microback_bench)        221
+        microback::OrderBook::find(microback::Integer<microback::OrderIdTag, unsigned long long>) const  (in microback_bench)        195
+        microback::ExecutionEngine::cancellation_effect(std::pair<microback::Side, microback::Integer<microback::PriceTag, long long>>, microback::ExecutionEngine::Cancellation)  (in microback_bench)        175
+        microback::ExecutionEngine::passive_trade(microback::MarketEvent const&)  (in microback_bench)        136
+        microback::ExecutionEngine::process_until(microback::Integer<microback::TimestampTag, long long>, bool)  (in microback_bench)        114
+        microback::OrderBook::apply(microback::MarketEvent const&)  (in microback_bench)        99
+        (anonymous namespace)::stream((anonymous namespace)::Workload)  (in microback_bench)        17
+        microback::OrderBook::best_ask() const  (in microback_bench)        12
+        microback::OrderBook::best_bid() const  (in microback_bench)        10
+
+Binary Images:
+       0x102904000 -        0x102944c27 +microback_bench (0) <D5DEB77C-2DBD-342C-A014-7CEF3C89615F> /Users/*/Desktop/*/microback_bench
+       0x18e9b8000 -        0x18ea0ab4b  libobjc.A.dylib (951.7) <FF1D8AE4-ABEF-35F1-A30A-1183B9CB414F> /usr/lib/libobjc.A.dylib
+       0x18ea0b000 -        0x18ea3fd07  libdyld.dylib (1378) <B147D877-D0C2-388F-B38D-D3132E39905F> /usr/lib/system/libdyld.dylib
+       0x18ea40000 -        0x18eae6217  dyld (1.0.0 - 1378) <A237EF81-B68B-37BA-A165-92C965529534> /usr/lib/dyld
+       0x18eae7000 -        0x18eaea228  libsystem_blocks.dylib (96) <CC947089-488D-316B-A9C7-46DEC0F73145> /usr/lib/system/libsystem_blocks.dylib
+       0x18eaeb000 -        0x18eb3f55f  libxpc.dylib (3102.120.13) <C40FCAE8-7A17-3D82-87CB-3DA4802ADEF1> /usr/lib/system/libxpc.dylib
+       0x18eb40000 -        0x18eb609ff  libsystem_trace.dylib (1861.120.4) <D0FABAB3-5AE7-3F10-8C62-60CBF5D70850> /usr/lib/system/libsystem_trace.dylib
+       0x18eb61000 -        0x18ec0f5f7  libcorecrypto.dylib (1922.121.1) <A01A158D-6FE7-3B1C-A2C4-6BCB90D7314A> /usr/lib/system/libcorecrypto.dylib
+       0x18ec10000 -        0x18ec601d7  libsystem_malloc.dylib (812.100.31) <5FAE4807-4D2B-3A95-A63A-DD96D3DA11B4> /usr/lib/system/libsystem_malloc.dylib
+       0x18ec61000 -        0x18eca823f  libdispatch.dylib (1542.100.32) <F071EFE4-299F-3089-ACC4-0025B8FFB52A> /usr/lib/system/libdispatch.dylib
+       0x18eca9000 -        0x18ecabffb  libsystem_featureflags.dylib (103) <71FCFFBD-85F8-3365-AFE0-BECEA4369122> /usr/lib/system/libsystem_featureflags.dylib
+       0x18ecac000 -        0x18ed2cd9f  libsystem_c.dylib (1752.120.2) <694B7881-1BF3-3D0F-8F19-B50AE4E8EF8A> /usr/lib/system/libsystem_c.dylib
+       0x18ed2d000 -        0x18edbdae7  libc++.1.dylib (2100.43) <5013C0F8-84A9-3B56-9FEB-C353816A750F> /usr/lib/libc++.1.dylib
+       0x18edbe000 -        0x18edd875f  libc++abi.dylib (2100.43) <E482D257-E5A0-3816-BD97-7B39342958DA> /usr/lib/libc++abi.dylib
+       0x18edd9000 -        0x18ee162af  libsystem_kernel.dylib (12377.121.6) <CC1CF985-BC65-3725-809F-4C1E36B8F4BA> /usr/lib/system/libsystem_kernel.dylib
+       0x18ee17000 -        0x18ee23b3b  libsystem_pthread.dylib (539.100.4) <4F33683C-18C8-39A1-800B-2E3BD43BCC13> /usr/lib/system/libsystem_pthread.dylib
+       0x18ee24000 -        0x18ee2c963  libsystem_platform.dylib (375.120.2) <160FD864-8D15-36FC-9E97-9725388CFAFE> /usr/lib/system/libsystem_platform.dylib
+       0x18ee2d000 -        0x18ee5c6eb  libsystem_info.dylib (600) <3D62F2D9-F516-31BF-83C7-E203D872300B> /usr/lib/system/libsystem_info.dylib
+       0x192df4000 -        0x192dfde5f  libsystem_darwin.dylib (1752.120.2) <8858F025-745A-388E-9544-080781CC9A69> /usr/lib/system/libsystem_darwin.dylib
+       0x19325f000 -        0x1932711b6  libsystem_notify.dylib (348.120.4) <64D76451-1E0C-369B-A631-54DA3140E083> /usr/lib/system/libsystem_notify.dylib
+       0x19552c000 -        0x195546f7b  libsystem_networkextension.dylib (2226.120.19) <3A1DAD41-F14F-3595-B9BB-058A84308BE7> /usr/lib/system/libsystem_networkextension.dylib
+       0x1955c9000 -        0x1955e0fdf  libsystem_asl.dylib (406) <F40838DF-2F15-3F62-970F-DEE25706BF1B> /usr/lib/system/libsystem_asl.dylib
+       0x197187000 -        0x19718f387  libsystem_symptoms.dylib (2169.120.7) <F5029F5C-1BF3-31C7-892E-BC8606AC829E> /usr/lib/system/libsystem_symptoms.dylib
+       0x19b42b000 -        0x19b463257  libsystem_containermanager.dylib (725.120.2) <518BE44D-AA31-31E6-B44B-A37AD5E47040> /usr/lib/system/libsystem_containermanager.dylib
+       0x19c83c000 -        0x19c8405d7  libsystem_configuration.dylib (1405.120.5) <0F7BBC1C-3D50-3E59-A31F-E4672A80BCEB> /usr/lib/system/libsystem_configuration.dylib
+       0x19c841000 -        0x19c8478cf  libsystem_sandbox.dylib (2680.120.12) <EC3A75EA-44C0-3A0B-9BF7-71C117B0A9C6> /usr/lib/system/libsystem_sandbox.dylib
+       0x19de9b000 -        0x19de9e1fb  libquarantine.dylib (196.120.2) <5849009B-ACA3-3796-94C4-BBDF8D300EBA> /usr/lib/system/libquarantine.dylib
+       0x19e63a000 -        0x19e640d03  libsystem_coreservices.dylib (191.4.5) <9576143B-C303-35A3-BA63-1FD06EDA2BB1> /usr/lib/system/libsystem_coreservices.dylib
+       0x19ebc5000 -        0x19ec02a77  libsystem_m.dylib (3312.100.1) <A7E0863C-101A-31A0-922B-ED9B02626151> /usr/lib/system/libsystem_m.dylib
+       0x19ec04000 -        0x19ec07527  libmacho.dylib (1378) <755441B4-C034-3E3A-8E3C-F424FBB28261> /usr/lib/system/libmacho.dylib
+       0x19ec21000 -        0x19ec2e3a7  libcommonCrypto.dylib (600035) <CE357BB1-2D49-37CC-9FFE-D093936B1475> /usr/lib/system/libcommonCrypto.dylib
+       0x19ec2f000 -        0x19ec38ca3  libunwind.dylib (2100.2) <FC8F0C4E-6FB0-3E27-ABEF-B0FA720CD5E4> /usr/lib/system/libunwind.dylib
+       0x19ec41000 -        0x19ec4b7ff  libcopyfile.dylib (240) <8ACFAC7A-88E9-3EF4-853F-A9140FF110E5> /usr/lib/system/libcopyfile.dylib
+       0x19ec4c000 -        0x19ec4f987  libcompiler_rt.dylib (103.3) <AA79151F-C19D-3C7C-92F8-B10F04D82C1C> /usr/lib/system/libcompiler_rt.dylib
+       0x19ec50000 -        0x19ec5478b  libsystem_collections.dylib (1752.120.2) <72DB5BE7-EF78-37D0-8AAD-53E37CFE4287> /usr/lib/system/libsystem_collections.dylib
+       0x19ec55000 -        0x19ec584cf  libsystem_secinit.dylib (168.100.7) <E525C566-CDA4-3D99-B12B-1615FD54A1F3> /usr/lib/system/libsystem_secinit.dylib
+       0x19ec59000 -        0x19ec5bbf7  libremovefile.dylib (85.100.6) <635E661D-80A7-340D-A165-3F7D318FDFC9> /usr/lib/system/libremovefile.dylib
+       0x19ec5c000 -        0x19ec5cf27  libkeymgr.dylib (31) <8C08891A-DF1C-3DCC-AB64-4742FD6BE9BA> /usr/lib/system/libkeymgr.dylib
+       0x19ec5d000 -        0x19ec65e37  libsystem_dnssd.dylib (2881.120.11) <6F45DF3F-233B-3BC3-BA8C-B43E7DA884BF> /usr/lib/system/libsystem_dnssd.dylib
+       0x19ec66000 -        0x19ec6b09b  libcache.dylib (95) <189B576E-6176-3F82-8FA4-5914B0BEAEE7> /usr/lib/system/libcache.dylib
+       0x19ec6c000 -        0x19ec6dce3  libSystem.B.dylib (1356) <D65E4112-C151-3FF8-BEB7-4841436012D6> /usr/lib/libSystem.B.dylib
+       0x291ea3000 -        0x291eaa349  libRosetta.dylib (367.9) <8651ED4F-6506-3788-B56B-32EE414A85CA> /usr/lib/libRosetta.dylib
+       0x293ac0000 -        0x293ac3a4b  libsystem_darwindirectory.dylib (122) <CF277A2C-C818-3F16-8B3F-3C7B39FCD164> /usr/lib/system/libsystem_darwindirectory.dylib
+       0x293ac4000 -        0x293acd5d3  libsystem_eligibility.dylib (319.121.1) <DDAC0531-0262-3DDC-8EC8-80EB9438847A> /usr/lib/system/libsystem_eligibility.dylib
+       0x293ace000 -        0x293ad588b  libsystem_sanitizers.dylib (26.1) <44C4234F-8B2D-38D3-A774-B4B3C75AF3A7> /usr/lib/system/libsystem_sanitizers.dylib
+       0x293ad6000 -        0x293ad6bb7  libsystem_trial.dylib (474.2.18.2) <68C583BA-AFF5-3916-86AE-6E38BFEF98D6> /usr/lib/system/libsystem_trial.dylib

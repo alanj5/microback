@@ -258,3 +258,22 @@ ns/event; CSV/10M: 233.70 ns/event. No Linux counters available on macOS; no inv
 IPC/cache claims. Profile identifies depth copying/allocations under execution.
 No core optimization yet. Local focused commit, no remote. Next: quantity lookup
 optimization justified by this baseline/profile, with repeated before/after gates.
+
+## Stage 8c — Measured quantity lookup optimization (2026-10-05)
+
+Baseline committed as 1d8bc93. Replaced visible() full depth copy/scan with const
+map aggregate lookup; no ladder, queue or scheduler changes. `scripts/validate.sh`
+passed all 48 cases in Debug/Release/ASan+UBSan and style/static checks.
+`cmake --build build/bench --parallel 4`, `python scripts/benchmark.py
+docs/benchmarks/optimized --filter '^execution/' --repetitions 5`, and
+`scripts/profile.sh docs/benchmarks/optimized/profile` all passed. Median ns/event
+100-level: 1164.27 -> 60.59 (94.80% less time, 19.22x throughput); 10-level:
+463.49 -> 44.28. Individual observations/CV and before/after sample stacks retained.
+Optimized profile replaces depth allocation paths with map lookup. This is native
+execution-update evidence, not Python end-to-end or plain replay improvement.
+`/tmp/microback-clean/bin/pip install -e . --no-build-isolation`, Python tests
+(7 passed), bindings tidy, and `scripts/compare_native.py` against the preserved
+Stage 8a tool-venv extension on small synthetic/full real CSV passed 24 complete
+result comparisons (two strategies * three queues * two latencies * two datasets).
+No Linux counters or cross-platform speed claims. Local commit; no remote.
+Next: final execution research, reproducibility documentation and review.

@@ -83,6 +83,7 @@ class OrderBook {
     [[nodiscard]] std::optional<PriceTicks> mid_price() const;
     [[nodiscard]] std::optional<PriceTicks> microprice() const;
     [[nodiscard]] double imbalance(std::size_t levels) const;
+    [[nodiscard]] QuantityLots quantity_at(Side, PriceTicks) const;
     [[nodiscard]] DepthView depth(Side, std::size_t levels) const;
     [[nodiscard]] std::vector<Order> orders_at(Side, PriceTicks) const;
     [[nodiscard]] std::optional<PriceTicks> vwap(Side liquidity_side, QuantityLots) const;

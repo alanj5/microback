@@ -126,11 +126,7 @@ void ExecutionEngine::cancel(OrderId id) {
     schedule(id, ActionKind::Cancel, arrival());
 }
 std::int64_t ExecutionEngine::visible(LevelKey key) const {
-    const auto depth = book().depth(key.first, std::numeric_limits<std::size_t>::max());
-    for (const auto &level : depth)
-        if (level.price == key.second)
-            return level.quantity.value();
-    return 0;
+    return book().quantity_at(key.first, key.second).value();
 }
 void ExecutionEngine::fill(SimOrder &order, PriceTicks price, std::int64_t quantity,
                            Liquidity liquidity) {

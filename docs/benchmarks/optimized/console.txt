@@ -1,0 +1,32 @@
+Unable to determine clock rate from sysctl: hw.cpufrequency: No such file or directory
+This does not affect benchmark measurements, only the metadata output.
+***WARNING*** Failed to set thread affinity. Estimated CPU frequency may be incorrect.
+2026-10-05T19:14:45+01:00
+Running build/bench/microback_bench
+Run on (10 X 24 MHz CPU s)
+CPU Caches:
+  L1 Data 64 KiB
+  L1 Instruction 128 KiB
+  L2 Unified 4096 KiB (x10)
+Load Average: 4.11, 3.57, 4.15
+---------------------------------------------------------------------------------------
+Benchmark                             Time             CPU   Iterations UserCounters...
+---------------------------------------------------------------------------------------
+execution/1000000/10               45.3 ms         45.3 ms            6 events_per_second=22.0839M/s items_per_second=22.0839M/s ns_per_event=45.2818s
+execution/1000000/10               44.8 ms         44.8 ms            6 events_per_second=22.3177M/s items_per_second=22.3177M/s ns_per_event=44.8075s
+execution/1000000/10               44.3 ms         44.3 ms            6 events_per_second=22.5825M/s items_per_second=22.5825M/s ns_per_event=44.282s
+execution/1000000/10               43.8 ms         43.8 ms            6 events_per_second=22.8175M/s items_per_second=22.8175M/s ns_per_event=43.826s
+execution/1000000/10               44.0 ms         44.0 ms            6 events_per_second=22.7375M/s items_per_second=22.7375M/s ns_per_event=43.9802s
+execution/1000000/10_mean          44.4 ms         44.4 ms            5 events_per_second=22.5078M/s items_per_second=22.5078M/s ns_per_event=44.4355s
+execution/1000000/10_median        44.3 ms         44.3 ms            5 events_per_second=22.5825M/s items_per_second=22.5825M/s ns_per_event=44.282s
+execution/1000000/10_stddev       0.604 ms        0.604 ms            5 events_per_second=304.178k/s items_per_second=304.178k/s ns_per_event=0.603541s
+execution/1000000/10_cv            1.36 %          1.36 %             5 events_per_second=1.35% items_per_second=1.35% ns_per_event=1.36%
+execution/1000000/100              61.7 ms         61.7 ms            4 events_per_second=16.2119M/s items_per_second=16.2119M/s ns_per_event=61.683s
+execution/1000000/100              60.6 ms         60.6 ms            4 events_per_second=16.5045M/s items_per_second=16.5045M/s ns_per_event=60.5895s
+execution/1000000/100              60.1 ms         60.1 ms            4 events_per_second=16.6385M/s items_per_second=16.6385M/s ns_per_event=60.1018s
+execution/1000000/100              62.1 ms         62.1 ms            4 events_per_second=16.0989M/s items_per_second=16.0989M/s ns_per_event=62.116s
+execution/1000000/100              60.4 ms         60.4 ms            4 events_per_second=16.5554M/s items_per_second=16.5554M/s ns_per_event=60.4033s
+execution/1000000/100_mean         61.0 ms         61.0 ms            5 events_per_second=16.4018M/s items_per_second=16.4018M/s ns_per_event=60.9787s
+execution/1000000/100_median       60.6 ms         60.6 ms            5 events_per_second=16.5045M/s items_per_second=16.5045M/s ns_per_event=60.5895s
+execution/1000000/100_stddev      0.873 ms        0.872 ms            5 events_per_second=233.421k/s items_per_second=233.421k/s ns_per_event=0.871945s
+execution/1000000/100_cv           1.43 %          1.43 %             5 events_per_second=1.42% items_per_second=1.42% ns_per_event=1.43%

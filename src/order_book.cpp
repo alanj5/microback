@@ -166,6 +166,17 @@ std::optional<PriceTicks> OrderBook::microprice() const {
     const Wide numerator = aq * bids_.begin()->first.value() + bq * asks_.begin()->first.value();
     return PriceTicks{static_cast<std::int64_t>(numerator / (bq + aq))};
 }
+QuantityLots OrderBook::quantity_at(Side side, PriceTicks price) const {
+    auto lookup = [price](const auto &levels) {
+        const auto it = levels.find(price);
+        return it == levels.end() ? QuantityLots{} : it->second.total_quantity;
+    };
+    if (side == Side::Buy)
+        return lookup(bids_);
+    if (side == Side::Sell)
+        return lookup(asks_);
+    throw std::invalid_argument("invalid side");
+}
 DepthView OrderBook::depth(Side side, std::size_t levels) const {
     check_side(side);
     DepthView result;

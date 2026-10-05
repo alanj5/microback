@@ -158,3 +158,29 @@ TEST_CASE("Seeded mutation stream preserves aggregates and index") {
     }
     REQUIRE(b.order_count() == 0);
 }
+
+TEST_CASE("Quantity lookup matches aggregate depth through mutations") {
+    OrderBook book;
+    book.add({OrderId{1}, Side::Buy, PriceTicks{100}, QuantityLots{5}});
+    book.add({OrderId{2}, Side::Buy, PriceTicks{100}, QuantityLots{7}});
+    book.add({OrderId{3}, Side::Buy, PriceTicks{99}, QuantityLots{2}});
+    book.add({OrderId{4}, Side::Sell, PriceTicks{102}, QuantityLots{9}});
+    auto compare = [&] {
+        for (auto side : {Side::Buy, Side::Sell}) {
+            for (const auto &l : book.depth(side, 100))
+                REQUIRE(book.quantity_at(side, l.price) == l.quantity);
+            REQUIRE(book.quantity_at(side, PriceTicks{1}) == QuantityLots{});
+        }
+        REQUIRE(book.valid());
+    };
+    compare();
+    REQUIRE(book.quantity_at(Side::Buy, PriceTicks{100}) == QuantityLots{12});
+    book.modify({OrderId{2}, PriceTicks{98}, QuantityLots{11}});
+    compare();
+    book.cancel(OrderId{1});
+    compare();
+    REQUIRE(book.quantity_at(Side::Buy, PriceTicks{100}) == QuantityLots{});
+    book.clear();
+    compare();
+    REQUIRE_THROWS(book.quantity_at(static_cast<Side>(255), PriceTicks{100}));
+}
