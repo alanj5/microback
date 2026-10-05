@@ -1,6 +1,8 @@
 #ifndef MICROBACK_EXECUTION_HPP
 #define MICROBACK_EXECUTION_HPP
+#include "microback/portfolio.hpp"
 #include "microback/replay_engine.hpp"
+#include "microback/risk.hpp"
 #include <map>
 #include <queue>
 #include <vector>
@@ -8,7 +10,7 @@ namespace microback {
 enum class QueueModel : std::uint8_t { Conservative, Neutral, Optimistic };
 enum class Liquidity : std::uint8_t { Maker, Taker };
 // One atom = one millionth of one tick*lot monetary unit.
-using MoneyAtoms = __int128;
+
 class LatencyModel {
   public:
     virtual ~LatencyModel() = default;
@@ -74,6 +76,9 @@ class ExecutionEngine {
     using LevelKey = std::pair<Side, PriceTicks>;
     ReplayEngine replay_;
     ExecutionConfig config_;
+    RiskLimits risk_;
+    Portfolio portfolio_;
+    std::vector<Rejection> rejections_;
     ConstantLatency latency_;
     Timestamp now_;
     std::uint64_t next_id_ = 1, next_action_ = 1;
@@ -98,7 +103,7 @@ class ExecutionEngine {
     [[nodiscard]] std::int64_t visible(LevelKey) const;
 
   public:
-    explicit ExecutionEngine(ExecutionConfig = {});
+    explicit ExecutionEngine(ExecutionConfig = {}, RiskLimits = {}, MoneyAtoms initial_cash = 0);
     // Submit only schedules. Call flush() after accepting all requests at current time.
     OrderId submit(Side, OrderType, TimeInForce, QuantityLots, PriceTicks limit = {});
     void cancel(OrderId);
@@ -109,6 +114,8 @@ class ExecutionEngine {
     [[nodiscard]] Timestamp now() const noexcept { return now_; }
     [[nodiscard]] const std::map<OrderId, SimOrder> &orders() const noexcept { return orders_; }
     [[nodiscard]] const std::vector<Fill> &fills() const noexcept { return fills_; }
+    [[nodiscard]] const Portfolio &portfolio() const noexcept { return portfolio_; }
+    [[nodiscard]] const std::vector<Rejection> &rejections() const noexcept { return rejections_; }
     [[nodiscard]] bool valid() const;
 };
 } // namespace microback

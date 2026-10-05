@@ -18,8 +18,9 @@ ConstantLatency::ConstantLatency(Timestamp latency) : latency_(latency) {
     if (latency.value() < 0)
         throw std::invalid_argument("negative latency");
 }
-ExecutionEngine::ExecutionEngine(ExecutionConfig config)
-    : config_(config), latency_(config.latency_ns) {
+ExecutionEngine::ExecutionEngine(ExecutionConfig config, RiskLimits risk, MoneyAtoms initial_cash)
+    : config_(config), risk_(risk), portfolio_(initial_cash), latency_(config.latency_ns) {
+    validate_limits(risk_);
     if (config.queue_model != QueueModel::Conservative &&
         config.queue_model != QueueModel::Neutral && config.queue_model != QueueModel::Optimistic)
         throw std::invalid_argument("invalid queue model");
@@ -62,6 +63,49 @@ OrderId ExecutionEngine::submit(Side side, OrderType type, TimeInForce tif, Quan
     order.submitted_at = now_;
     order.exchange_arrival_at = time;
     order.decision_mid = book().midpoint();
+    std::optional<RejectionReason> reason;
+    if (quantity > risk_.max_order_size)
+        reason = RejectionReason::OrderSize;
+    MoneyAtoms buys = 0, sells = 0;
+    for (const auto &[existing_id, existing] : orders_) {
+        (void)existing_id;
+        if (existing.side == Side::Buy)
+            buys += existing.remaining_quantity.value();
+        else
+            sells += existing.remaining_quantity.value();
+    }
+    if (side == Side::Buy)
+        buys += quantity.value();
+    else
+        sells += quantity.value();
+    const auto position = portfolio_.state().position.value();
+    if (!reason && (position + buys > risk_.max_position.value() ||
+                    position - sells < -static_cast<MoneyAtoms>(risk_.max_position.value())))
+        reason = RejectionReason::Position;
+    if (!reason && risk_.max_notional_atoms > 0) {
+        auto reference = type == OrderType::Limit
+                             ? std::optional<PriceTicks>{limit}
+                             : (side == Side::Buy ? book().best_ask() : book().best_bid());
+        if (type == OrderType::Market) {
+            const auto depth = book().depth(side == Side::Buy ? Side::Sell : Side::Buy,
+                                            std::numeric_limits<std::size_t>::max());
+            if (!depth.empty())
+                reference = depth.back().price;
+        }
+        if (!reference)
+            reason = RejectionReason::MissingPrice;
+        else if (notional_atoms(*reference, quantity) > risk_.max_notional_atoms)
+            reason = RejectionReason::Notional;
+    }
+    if (reason) {
+        order.status = OrderStatus::Rejected;
+        order.remaining_quantity = QuantityLots{0};
+        order.cancelled_quantity = quantity;
+        orders_.emplace(id, order);
+        rejections_.push_back({id, now_, *reason});
+        ++next_id_;
+        return id;
+    }
     orders_.emplace(id, order);
     try {
         schedule(id, ActionKind::Submit, time);
@@ -101,7 +145,10 @@ void ExecutionEngine::fill(SimOrder &order, PriceTicks price, std::int64_t quant
                 static_cast<MoneyAtoms>(notional) * ppm,
                 order.decision_mid,
                 order.arrival_mid};
+    auto next_portfolio = portfolio_;
+    next_portfolio.apply(record);
     fills_.push_back(record);
+    portfolio_ = next_portfolio;
     order.remaining_quantity = QuantityLots{order.remaining_quantity.value() - quantity};
     order.filled_quantity = QuantityLots{order.filled_quantity.value() + quantity};
     order.status =

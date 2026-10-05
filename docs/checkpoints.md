@@ -180,3 +180,15 @@ Portfolio/PnL, submission risk limits/rejection records, strategies, bindings, r
 venue data, binary replay, profiling/benchmarks and research remain later stages.
 Git: Stage 3 is `d1d0d5f`; Stage 4 is the focused execution commit containing this report.
 Not pushed: no configured remote. Next: Stage 5 portfolio accounting and risk controls.
+
+## Stage 5 — Accounting and risk
+
+Implemented integer portfolio/basis/PnL, fees, exact midpoint marks, signed slippage,
+submission size/position/notional limits, live-order reservations and rejection logs.
+Previous stage: `90cd605`. `PATH=/Users/alanD/Desktop/Projects/.microback-tools/bin:/opt/homebrew/opt/llvm/bin:$PATH scripts/validate.sh` passed Debug/Release/ASan+UBSan
+CTest (41 cases), formatting, every C++ source's clang-tidy with warnings as errors,
+and diff checks. The script records the exact build/test commands. An initial lint
+failure in an overflow test was fixed and the whole gate rerun. Long/short round trips,
+partial closes, reversals, fees/rebates, exposure reservations and unchanged state on
+rejection are covered. Accounting/rounding and notional scope are in accounting-risk.md.
+No remote configured, so local commit only. Next: restricted Context and native strategies.

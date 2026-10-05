@@ -129,7 +129,7 @@ test must fail a look-ahead implementation. Filled+remaining+cancelled quantity 
 
 ## Stage 5 — Portfolio and risk
 
-**Dependency:** Stage 4. **Status:** planned.
+**Dependency:** Stage 4. **Status:** complete locally; Linux CI unexecuted.
 
 **Objective:** exact financial state and controlled exposure.
 
