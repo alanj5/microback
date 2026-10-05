@@ -6,7 +6,6 @@
   "tick": "0.1",
   "lot": "0.00000001",
   "started_utc": "2026-10-05T18:01:07.316333+00:00",
-  "ended_utc": "2026-10-05T18:03:18.131583+00:00",
   "requested_seconds": 120,
   "sha256": {
     "kraken-btc-usd.jsonl": "67a0410f76f0f88acb1edf81561afb86ed386a0db6231e68601f69b4a00b2e13",
@@ -17,5 +16,9 @@
   "events": 11862,
   "trade_sequence_gaps": 0,
   "time_basis": "local receipt nanoseconds",
-  "checksum": "all book messages verified"
+  "checksum": "all book messages verified",
+  "conversion_finished_utc": "2026-10-05T18:03:18.131583+00:00",
+  "first_canonical_timestamp_ns": 1791223268031731000,
+  "last_canonical_timestamp_ns": 1791223387647661000,
+  "provenance_time_note": "The original ended_utc was recorded after conversion; canonical endpoints specify the actual market-data horizon."
 }

@@ -28,6 +28,9 @@ def test_exact_large_money_and_empty_frames():
     value = 2**100 + 123
     result = run(FIXTURE, parameters={'entry_threshold': 1.0}, config=Config(initial_cash_atoms=value))
     assert result.equity.iloc[-1].cash_atoms == value
+    low = run(FIXTURE, parameters={'entry_threshold': 1.0}, config=Config(initial_cash_atoms=-2**127))
+    assert low.equity.iloc[-1].cash_atoms == -2**127
+    assert low.summary()['net_pnl_atoms'] == 0
     assert len(result.fills) == 0 and 'fee_atoms' in result.fills
     assert result.fills.price_ticks.dtype == 'int64'
     with pytest.raises(TypeError): Config(latency_ns=0.1)

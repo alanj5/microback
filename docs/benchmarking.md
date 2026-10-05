@@ -52,3 +52,15 @@ aggregate lookup reduced median execution-update CPU time from 1164.27 to 60.59
 ns/event (94.80%, 19.22x throughput). This workload has no strategy/history recording;
 it is not an end-to-end Python speed claim. Plain 10M binary replay baseline was
 63.71 ns/event versus CSV 233.70 ns/event. Figures are machine/workload observations.
+
+## Counter units
+
+Current raw output uses `seconds_per_item`, an inverse rate with units of seconds.
+The wrapper derives `ns_per_event` by multiplying by 1e9; the CV aggregate remains
+dimensionless. Historical baseline/optimized raw output used a scaled inverse-rate
+counter named `ns_per_event`: its numerical value was nanoseconds, but Google
+Benchmark appended a seconds suffix in console output. The historical reports
+explicitly identify that convention; those raw observations are preserved intact.
+The final change corrects naming/scaling and does not alter timed workloads. A
+two-repetition best-price smoke run validated the current conversion, without
+replacing the five-repetition before/after performance evidence.

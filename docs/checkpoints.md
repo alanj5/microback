@@ -277,3 +277,97 @@ Stage 8a tool-venv extension on small synthetic/full real CSV passed 24 complete
 result comparisons (two strategies * three queues * two latencies * two datasets).
 No Linux counters or cross-platform speed claims. Local commit; no remote.
 Next: final execution research, reproducibility documentation and review.
+
+## Final stage — Research, documentation and review (2026-10-05)
+
+Implemented post-simulation metrics/markouts, exact-atom drawdown/return differences,
+full-event risk maxima, latency/queue/maker grids, explicit same-fill cost ablations,
+past-only walk-forward, deterministic plots/manifests and one-command demo. Published
+research tables/plots exclude raw capture and derived window CSVs. Architecture,
+execution/data/API/assumptions/review and public README now describe all contracts.
+The review's signed-minimum subtraction, strategy reuse, sticky finish, converter
+filename collision, decimal lexeme/float rejection, Python ABI cache and reporting
+integer-overflow issues have regression coverage. Native corrections preserve all
+24 normal complete-result comparisons with the pre-optimization extension.
+
+Executed from the repository root (all final checks passed):
+
+```sh
+export PATH=/Users/alanD/Desktop/Projects/.microback-tools/bin:/opt/homebrew/opt/llvm/bin:$PATH
+bash scripts/validate.sh
+cmake -S . -B build/binding-check -G Ninja -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF -DMICROBACK_PYTHON=ON -Dpybind11_DIR=$(/tmp/microback-clean/bin/python -m pybind11 --cmakedir) -DPython_EXECUTABLE=/tmp/microback-clean/bin/python
+cmake --build build/binding-check --parallel 4
+clang-tidy -p build/binding-check src/bindings.cpp --quiet --warnings-as-errors='*'
+cmake --build build/bench --parallel 4
+clang-tidy -p build/bench benchmarks/bench.cpp --quiet --warnings-as-errors='*'
+python scripts/benchmark.py output/final-benchmark-smoke --filter '^best$' --repetitions 2
+python -m build --wheel --no-isolation
+/tmp/microback-final-install/bin/pip install --force-reinstall --no-deps dist/*.whl
+/tmp/microback-final-install/bin/python -m pytest tests/python -q
+/tmp/microback-final-install/bin/python scripts/research.py --output output/research
+/tmp/microback-final-install/bin/python scripts/research.py --output output/research-repeat
+bash scripts/demo.sh
+python scripts/check_format.py
+git diff --check
+```
+
+Debug, Release and LLVM 23 ASan+UBSan each passed all **52 CTest cases** (50
+Catch2 cases plus CLI fixture/converter tests); project and binding/benchmark
+static checks passed. **13 Python tests** passed in a clean wheel environment;
+package build/install/import, synthetic demo and benchmark smoke passed. An isolated
+wheel build also passed during final-stage development. The dedicated binding
+compile database avoids temporary pybind11 include paths deleted after isolated
+package builds. The visible `/tmp/microback-clean` editable environment avoids
+macOS hidden `.pth` handling in the dot-named tools venv; no source workaround.
+
+Complete result equivalence command (24 cases passed after native fixes):
+
+```sh
+/tmp/microback-clean/bin/python scripts/compare_native.py /Users/alanD/Desktop/Projects/.microback-tools/lib/python3.14/site-packages/microback/_core.cpython-314-darwin.so data/generated/small.csv data/raw/kraken-btc-usd.csv
+```
+
+For every file under output/research, comparing read_bytes() against the same
+relative file under output/research-repeat established **53 exact byte equalities**
+(CSV/JSON/PNG, including eight generated window CSVs). The published 45 artifacts
+omit those window files. All real plot layouts were visually inspected, including
+the final maker-only adverse-selection plot. Manifests pin configurations, versions,
+source/data/window hashes and seed; dirty=true/parent b002d92 records measurements
+made before the final commit. Source hashes match the final measured implementation.
+JSON manifests reject NaN; all workflow jobs parse; generated/raw/build environments
+are ignored. Repository review and local doc-link checks passed.
+
+Research interpretation: scenario fees overwhelm the small imbalance gross profit;
+queue generosity increases fills and losses in this short receipt-ordered capture.
+Latency results are path/packet-normalization sensitivity, not a claim that delay
+improves execution. The constant-price control has identical latency outcomes and a
+degenerate single-fill maker case. Future labels are reporting-only and censored;
+walk-forward uses preceding windows with a fresh portfolio. No profits, exact L2
+queues or annual forecast quality are claimed. See research/report.md.
+
+Git: final focused commit `docs: publish reproducible execution research and project
+documentation` includes reviewed corrections and their tests so the complete final
+stage is committed in a working state. No push or hosted CI dispatch is possible:
+`git remote -v` is empty. Linux perf/GCC CI remains unexecuted on macOS; macOS
+profile evidence and LLVM sanitizers are genuine substitutes. 100M generation is
+available but not executed. All optional features remain explicitly optional.
+Next stage: none; the locally applicable plan is complete.
+
+## Local commit index
+
+| Checkpoint | Commit |
+| --- | --- |
+| Checked plan | 2620fee |
+| Stage 1 | 4063893 |
+| Stage 2 | 8874eb3 |
+| Stage 3 | d1d0d5f |
+| Stage 4 | 90cd605 |
+| Stage 5 | 09bf73a |
+| Stage 6 | 6e4a165 |
+| Stage 7 | 3cbbb5a |
+| Stage 8a | e0f75fd |
+| Stage 8b | 1d8bc93 |
+| Stage 8c | b002d92 |
+| Final | Commit titled `docs: publish reproducible execution research and project documentation` |
+
+All commits are local; no configured remote. The final SHA is available in git log
+and the completion response; this table avoids a self-referential commit hash.

@@ -53,6 +53,7 @@ class MarketMaker final : public Strategy {
 
   public:
     explicit MarketMaker(MakerParameters = {});
+    void on_start(Context &) override;
     void on_market_event(Context &, const MarketEvent &) override;
     void on_timer(Context &, Timestamp) override;
 };

@@ -114,3 +114,18 @@ TEST_CASE("Invalid accounting and risk configuration fail without mutation") {
     REQUIRE_THROWS(validate_limits({QuantityLots{-1}, QuantityLots{1}, 0}));
     REQUIRE_THROWS(money_mul(std::numeric_limits<MoneyAtoms>::max(), 2));
 }
+
+TEST_CASE("Extreme monetary subtraction fails safely without undefined negation") {
+    const auto minimum = std::numeric_limits<MoneyAtoms>::min();
+    Portfolio empty{minimum};
+    REQUIRE(empty.mark({PriceTicks{100}, false}).net_pnl == 0);
+    REQUIRE_THROWS(money_sub(0, minimum));
+    REQUIRE(money_sub(minimum, minimum) == 0);
+    Portfolio p;
+    const auto before = p.state();
+    Fill f{OrderId{1},       Timestamp{0}, Side::Sell,   PriceTicks{100}, QuantityLots{1},
+           Liquidity::Taker, minimum,      std::nullopt, std::nullopt};
+    REQUIRE_THROWS(p.apply(f));
+    REQUIRE(p.state() == before);
+    REQUIRE_THROWS(p.mark({PriceTicks{-1}, false}));
+}

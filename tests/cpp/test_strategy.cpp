@@ -79,3 +79,10 @@ TEST_CASE("Strategy parameter validation rejects inconsistent thresholds") {
     REQUIRE_THROWS(ImbalanceStrategy(ImbalanceParameters{0, 0.35, 0.1, QuantityLots{1}}));
     REQUIRE_THROWS(MarketMaker(MakerParameters{QuantityLots{0}}));
 }
+
+TEST_CASE("A market maker instance resets client IDs for repeated complete runs") {
+    MarketMaker maker;
+    InMemoryEventSource a{events()}, b{events()};
+    const auto first = run_backtest(a, maker);
+    REQUIRE(first == run_backtest(b, maker));
+}

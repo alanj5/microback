@@ -30,7 +30,7 @@ class Config:
                 continue
             if type(value) is not int:
                 raise TypeError(f'{name} requires an integer')
-            lo, hi = (-2**127 + 1, 2**127 - 1) if name.endswith('_atoms') else (-2**63, 2**63 - 1)
+            lo, hi = (-2**127, 2**127 - 1) if name.endswith('_atoms') else (-2**63, 2**63 - 1)
             if name == 'seed': lo, hi = 0, 2**64 - 1
             if not lo <= value <= hi: raise OverflowError(name)
         if min(self.latency_ns, self.timer_interval_ns, self.max_notional_atoms) < 0:
@@ -72,10 +72,18 @@ class Result:
         self.positions = self.equity[['timestamp_ns', 'position_lots', 'exposure_atoms', 'exposure_ticklots']].copy()
         self.rejections = _frame(raw['rejections'], 'rejections')
 
-    def summary(self):
+    def fills_df(self): return self.fills.copy()
+    def orders_df(self): return self.orders.copy()
+    def equity_df(self): return self.equity.copy()
+    def positions_df(self): return self.positions.copy()
+
+    @property
+    def metrics(self): return self.summary()
+
+    def summary(self, *, interval_ns=10_000_000):
         end = self.equity.iloc[-1] if len(self.equity) else {}
-        requested = int(self.orders.quantity_lots.sum())
-        filled = int(self.fills.quantity_lots.sum())
+        requested = sum(map(int, self.orders.quantity_lots))
+        filled = sum(map(int, self.fills.quantity_lots))
         values = {key: end.get(key, None) for key in (
             'gross_pnl_atoms', 'net_pnl_atoms', 'fees_atoms', 'turnover_atoms',
             'decision_slippage_atoms', 'arrival_slippage_atoms')}
@@ -84,7 +92,13 @@ class Result:
         values.update(fill_ratio=filled / requested if requested else 0.0,
                       fills=len(self.fills), orders=len(self.orders), rejections=len(self.rejections),
                       maker_fraction=float((self.fills.liquidity == 'maker').mean()) if filled else 0.0)
+        from .analytics import statistics
+        values.update(statistics(self, interval_ns))
         return values
+
+    def adverse_selection(self, horizons_ms=(1, 10, 100, 1000)):
+        from .analytics import adverse_selection
+        return adverse_selection(self, horizons_ms)
 
     def plot(self):
         import matplotlib.pyplot as plt
@@ -125,7 +139,9 @@ class Experiment:
         for values in product(*(grid[k] for k in keys)):
             choice = dict(zip(keys, values)); cfg, params = {}, {}
             for k, v in choice.items():
-                if k == 'latency_us': cfg['latency_ns'] = v * 1000
+                if k == 'latency_us':
+                    if type(v) is not int: raise TypeError('latency_us requires integer microseconds')
+                    cfg['latency_ns'] = v * 1000
                 elif k in asdict(self.config): cfg[k] = v
                 else: params[k] = v
             result = run(self.data, self.strategy, params, replace(self.config, **cfg))

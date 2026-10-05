@@ -11,6 +11,12 @@ inline MoneyAtoms money_add(MoneyAtoms a, MoneyAtoms b) {
         throw std::overflow_error("money addition overflow");
     return result;
 }
+inline MoneyAtoms money_sub(MoneyAtoms a, MoneyAtoms b) {
+    MoneyAtoms result;
+    if (__builtin_sub_overflow(a, b, &result))
+        throw std::overflow_error("money subtraction overflow");
+    return result;
+}
 inline MoneyAtoms money_mul(MoneyAtoms a, MoneyAtoms b) {
     MoneyAtoms result;
     if (__builtin_mul_overflow(a, b, &result))

@@ -12,7 +12,7 @@ from pathlib import Path
 HEADER = 'timestamp_ns,sequence,order_id,price_ticks,quantity_lots,type,side'.split(',')
 
 def units(value, quantum):
-    if isinstance(value, float): raise TypeError('decode decimals without float')
+    if isinstance(value, (float,bool)) or isinstance(quantum,(float,bool)): raise TypeError('decode decimals without float/bool')
     value, quantum = Decimal(value), Decimal(quantum)
     if not value.is_finite() or not quantum.is_finite() or quantum <= 0 or value < 0:
         raise ValueError('invalid decimal or quantum')
@@ -74,11 +74,14 @@ class Adapter:
             new = {'Buy': {}, 'Sell': {}} if snapshot else {s: dict(v) for s, v in old.items()}
             for field, side in (('bids', 'Buy'), ('asks', 'Sell')):
                 for level in data.get(field, []):
+                    if not units(level['price'], self.tick): raise ValueError('zero price')
+                    units(level['qty'], self.lot)
                     p, q = Decimal(level['price']), Decimal(level['qty'])
-                    if not units(p, self.tick): raise ValueError('zero price')
-                    units(q, self.lot)
                     if q == 0: new[side].pop(p, None)
-                    else: new[side][p] = q
+                    else:
+                        # Equal Decimal keys retain the old object's exponent unless replaced.
+                        new[side].pop(p,None)
+                        new[side][p] = q
                 prices = sorted(new[side], reverse=side=='Buy')
                 new[side] = {p: new[side][p] for p in prices[:self.depth]}
             if new['Buy'] and new['Sell'] and max(new['Buy']) >= min(new['Sell']):

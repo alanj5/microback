@@ -45,8 +45,8 @@ void rates(benchmark::State &s, std::int64_t n) {
     s.SetItemsProcessed(s.iterations() * n);
     s.counters["events_per_second"] =
         benchmark::Counter(static_cast<double>(s.iterations() * n), benchmark::Counter::kIsRate);
-    s.counters["ns_per_event"] =
-        benchmark::Counter(static_cast<double>(s.iterations() * n) / 1e9,
+    s.counters["seconds_per_item"] =
+        benchmark::Counter(static_cast<double>(s.iterations() * n),
                            benchmark::Counter::kIsRate | benchmark::Counter::kInvert);
 }
 void add(benchmark::State &s) {

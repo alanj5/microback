@@ -1,0 +1,2 @@
+client_order_id,timestamp_ns,side,price_ticks,quantity_lots,liquidity,fee_atoms,decision_mid_ticks,arrival_mid_ticks,fee_ticklots
+1,100000,buy,10000,1,maker,1000000,10001.0,10001.0,1.0

@@ -344,6 +344,16 @@ bool ExecutionEngine::on_market_event(const MarketEvent &event) {
         throw;
     }
 }
+void ExecutionEngine::finish() {
+    if (failed_)
+        throw std::logic_error("execution failed");
+    try {
+        replay_.finish();
+    } catch (...) {
+        failed_ = true;
+        throw;
+    }
+}
 void ExecutionEngine::advance_to(Timestamp time) {
     if (failed_ || loading_snapshot_)
         throw std::logic_error("cannot advance failed/incomplete engine");

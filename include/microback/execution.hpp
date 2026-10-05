@@ -112,7 +112,7 @@ class ExecutionEngine {
     void flush();
     bool on_market_event(const MarketEvent &);
     void run(EventSource &);
-    void finish() { replay_.finish(); }
+    void finish();
     void advance_to(Timestamp);
     void set_fill_callback(std::function<void(const Fill &)> callback) {
         fill_callback_ = std::move(callback);

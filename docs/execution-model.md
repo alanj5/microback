@@ -1,4 +1,4 @@
-# Execution model (Stage 4)
+# Execution model
 
 ExecutionEngine owns deterministic historical ReplayEngine state, client orders,
 exchange-arrival actions, fills and a separate consumed-liquidity overlay. It does
@@ -110,3 +110,29 @@ selection labels must be computed after a run, never shown to strategy code.
 
 Portfolio/risk and strategy callbacks are subsequent stages. No cash/PnL/research
 claims are made for the current execution-only API.
+
+## Strategy, accounting and research boundaries
+
+The native runner publishes Context after exchange effects, accepts strategy requests
+and flushes those due now. on_fill runs after order/ledger changes at the fill clock;
+timers precede later external timestamps and tied timers follow first publication.
+The maker resets retained client IDs at on_start for repeated independent runs.
+finish propagates the execution engine's sticky failure as well as incomplete replay.
+No timer or queued action is executed beyond the last market timestamp automatically.
+
+Portfolio uses checked signed 128-bit atoms including subtraction (avoiding negation
+of the signed minimum). Fee scenarios are exact ppm; rebate is negative. Half-tick
+midpoints mark without rounding authoritative money. See accounting-risk.md.
+
+Python metrics sample returns at fixed time intervals using backward as-of marking;
+maximum drawdown/position/exposure use the full observed event path. Positive-equity
+Sharpe uses sample standard deviation; Sortino uses downside RMS about zero. Both
+use 365.25 days/year and are undefined for insufficient/degenerate data. Annualized
+values from short captures are arithmetic diagnostics without predictive meaning.
+
+Future midpoint move and markout are created only after a run. At each supported
+horizon, use the last observed midpoint at or before fill+horizon; censor labels
+beyond the end or stale by more than that horizon. Passive spread capture uses
+signed arrival-mid minus fill. Positive markout means favourable to the fill side;
+negative midpoint movement denotes adverse selection. No label alters historical
+book, client fills, training decisions or Context.

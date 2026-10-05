@@ -1,0 +1,5 @@
+scenario,net_pnl_ticklots,fills
+ideal_mid_same_fills,169850000.0,403
+ideal_mid_same_fills_plus_fees,-6411468368.5466,403
+depth_queue_fees_zero_latency,-6564131261.5466,403
+depth_queue_fees_250us,-5719846018.3626,357

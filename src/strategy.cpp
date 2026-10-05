@@ -49,6 +49,12 @@ MarketMaker::MarketMaker(MakerParameters p) : parameters_(p) {
         p.max_spread < p.min_spread || p.skew_ticks_per_lot.value() < 0)
         throw std::invalid_argument("invalid maker parameters");
 }
+void MarketMaker::on_start(Context &) {
+    buy_.reset();
+    sell_.reset();
+    buy_cancel_ = false;
+    sell_cancel_ = false;
+}
 void MarketMaker::quote(Context &ctx) {
     const auto bid = ctx.book().best_bid(), ask = ctx.book().best_ask();
     const auto pos = ctx.portfolio().state().position.value();

@@ -57,3 +57,13 @@ def test_captured_venue_fixture(tmp_path):
     result=run(output,'market_maker',{'size':100000})
     assert len(result.equity) >= 3
     assert (result.equity.ask_ticks > result.equity.bid_ticks).all()
+
+def test_checksum_preserves_latest_price_lexeme_and_rejects_float():
+    a=Adapter()
+    a.process(msg('snapshot',[('100.0','1.00000000')],[('100.2','2.00000000')]),1)
+    update=msg('update',[('100.00','0.50000000')],[('100.2','2.00000000')])
+    assert a.process(update,2)[0][5]=='Modify'
+    update['data'][0]['bids'][0]['price']=100.0
+    with pytest.raises(TypeError): a.process(update,3)
+    with pytest.raises(TypeError): units(True,'.1')
+    with pytest.raises(TypeError): units('1.0',.1)

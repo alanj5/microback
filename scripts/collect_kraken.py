@@ -29,11 +29,12 @@ async def collect(args):
                 if message.get('success') is False: raise RuntimeError(raw)
                 # Preserve raw numeric lexemes by inserting the JSON payload verbatim.
                 file.write('{"received_ns":'+str(received)+',"message":'+raw+'}\n')
+    captured_end=datetime.now(timezone.utc).isoformat()
     canonical = out.with_suffix('.csv')
     result = convert(out, canonical, symbol=args.symbol, tick=args.tick, lot=args.lot, depth=args.depth)
     metadata = {'venue':'Kraken', 'endpoint':'wss://ws.kraken.com/v2', 'symbol':args.symbol,
                 'depth':args.depth, 'tick':args.tick, 'lot':args.lot, 'started_utc':started,
-                'ended_utc':datetime.now(timezone.utc).isoformat(), 'requested_seconds':args.seconds,
+                'capture_ended_utc':captured_end, 'conversion_finished_utc':datetime.now(timezone.utc).isoformat(), 'requested_seconds':args.seconds,
                 'sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (out,canonical)},
                 'license_note':'Public API capture for local research; no redistribution license asserted. Raw files excluded from Git.',
                 **result}

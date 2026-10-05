@@ -29,3 +29,15 @@ highest average metric on preceding training files, freezes the choice and evalu
 exactly one combination on the next test file. Positions restart flat per file;
 window endpoints are validated before any tuning. Tie-breaking follows grid order.
 A window is a research split, not a continuous inventory carry between sessions.
+
+`result.summary(interval_ns=10_000_000)` adds event-path maximum drawdown/exposure,
+fixed-time mean inventory/exposure and Sharpe/Sortino using 365.25 days/year.
+Undefined risk ratios return None. `result.adverse_selection()` creates reporting-only
+future midpoint move/markout labels at 1/10/100/1000 ms, with end/staleness censoring.
+Money and execution costs remain exact; net = gross − fees. Slippage is a separate
+execution-quality measure already embedded in gross PnL, and is not subtracted again.
+
+The specification-style methods `fills_df()`, `orders_df()`, `equity_df()` and
+`positions_df()` return copies; `result.metrics` returns the default summary.
+The corresponding `.fills`, `.orders`, `.equity` and `.positions` tables remain
+available for direct pandas analysis.

@@ -32,7 +32,7 @@ Unknown version, record size, flags, symbol, enum and partial final record fail.
 EOF at a record boundary is valid. External SHA256 detects whole-record data loss;
 framing itself cannot detect removal of an entire trailing record.
 `microback-convert input.csv output.mkt` validates the complete replay and writes via
-a temporary file, publishing only after successful finish/close. CLI/Python dispatch
+a file inside an exclusively reserved temporary directory, publishing only after successful finish/close. CLI/Python dispatch
 `.mkt` to binary, all other suffixes to CSV. Format contains no tick/lot metadata:
 retain the dataset manifest, which defines units and provenance.
 

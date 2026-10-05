@@ -254,7 +254,7 @@ If no justified improvement is found this acceptance remains open, not claimed c
 
 ## Final stage — Research, documentation and review
 
-**Dependency:** all previous applicable acceptance criteria pass. **Status:** planned.
+**Dependency:** all previous applicable acceptance criteria pass. **Status:** complete locally; Linux CI/perf unexecuted.
 
 **Objective:** reproducible execution research and defensible systems evidence.
 

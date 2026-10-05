@@ -338,3 +338,12 @@ TEST_CASE("Overflow and malformed data leave execution unusable") {
         std::overflow_error);
     REQUIRE(overflow.orders().empty());
 }
+
+TEST_CASE("Finish preserves sticky execution failure even after a complete snapshot") {
+    ExecutionEngine engine;
+    CsvEventSource source{std::string{MICROBACK_FIXTURE_DIR} + "/replay.csv"};
+    engine.run(source);
+    REQUIRE_THROWS(engine.on_market_event({Timestamp{0}, Sequence{100}, OrderId{0}, PriceTicks{1},
+                                           QuantityLots{1}, MarketEventType::Trade, Side::Buy}));
+    REQUIRE_THROWS(engine.finish());
+}

@@ -11,7 +11,7 @@ dependencies = ["pandas>=2", "numpy>=1.26", "matplotlib>=3.8"]
 test = ["pytest>=8"]
 data = ["websockets>=14,<17"]
 [tool.scikit-build]
-build-dir = "build/python"
+build-dir = "build/python/{wheel_tag}"
 wheel.packages = ["python/microback"]
 cmake.build-type = "Release"
 [tool.scikit-build.cmake.define]

@@ -48,6 +48,8 @@ endif()
 
 option(MICROBACK_PYTHON "Build Python research extension" OFF)
 if(MICROBACK_PYTHON)
+  set(PYBIND11_FINDPYTHON ON)
+  find_package(Python 3.10 COMPONENTS Interpreter Development.Module REQUIRED)
   find_package(pybind11 CONFIG REQUIRED)
   set_target_properties(microback_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
   pybind11_add_module(_microback src/bindings.cpp)
@@ -75,4 +77,12 @@ if(MICROBACK_BENCHMARKS)
   endif()
   add_executable(microback_bench benchmarks/bench.cpp)
   target_link_libraries(microback_bench PRIVATE microback_core benchmark::benchmark)
+endif()
+
+if(BUILD_TESTING)
+  add_test(NAME converter_atomic_output COMMAND ${CMAKE_COMMAND}
+    -DCONVERTER=$<TARGET_FILE:microback-convert>
+    -DFIXTURE=${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/replay.csv
+    -DTEST_ROOT=${CMAKE_CURRENT_BINARY_DIR}/converter-test
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/cmake/test_converter.cmake)
 endif()
