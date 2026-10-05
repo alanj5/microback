@@ -5,9 +5,10 @@ planned Python research layer. The project studies execution latency, queue unce
 and transaction costs using market events. Profitability is not the success criterion.
 
 Development follows gated vertical stages in [the implementation plan](docs/implementation-plan.md).
-Currently Stages 1–2 provide the build, domain primitives, tests, CI and a FIFO limit
+Currently Stages 1–3 provide the build, domain primitives, tests, CI and a FIFO limit
 order book with indexed cancellations, depth, midpoint, microprice, imbalance and VWAP.
-Replay and client execution are not implemented yet. No throughput or research claims are made.
+Canonical CSV/in-memory replay and a fixture CLI also work. Client execution is not
+implemented yet. No throughput or research claims are made.
 
 ## Build and test
 
@@ -44,3 +45,21 @@ cmake -S . -B build/sanitize-llvm -DCMAKE_BUILD_TYPE=Debug \
 cmake --build build/sanitize-llvm --parallel
 ctest --test-dir build/sanitize-llvm --output-on-failure
 ```
+
+## Replay a canonical fixture
+
+```sh
+./build/debug/microback_cli tests/fixtures/replay.csv
+```
+
+Expected output:
+
+```text
+events=9 snapshots=1 sequence_gaps=0
+bid,100,8
+ask,102,10
+```
+
+See [canonical data and snapshot semantics](docs/data-format.md). Replay is sequential,
+strictly validated and deterministic. Client orders, latency, portfolio and strategies
+remain later stages.

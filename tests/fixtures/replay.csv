@@ -1,0 +1,10 @@
+timestamp_ns,sequence,order_id,price_ticks,quantity_lots,type,side
+0,1,0,0,0,Snapshot,Buy
+0,2,1,100,10,Snapshot,Buy
+0,3,2,102,12,Snapshot,Sell
+0,4,0,0,0,Snapshot,Sell
+100,5,3,99,4,Add,Buy
+200,6,1,100,8,Modify,Buy
+300,7,2,102,2,Trade,Sell
+400,8,3,0,0,Cancel,Buy
+500,9,0,103,5,Trade,Sell

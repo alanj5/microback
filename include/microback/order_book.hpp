@@ -10,6 +10,7 @@
 #include <vector>
 
 namespace microback {
+struct MarketEvent;
 struct Order {
     OrderId id;
     Side side;
@@ -69,6 +70,7 @@ class OrderBook {
     OrderBook(OrderBook &&) = delete;
     OrderBook &operator=(OrderBook &&) = delete;
     void add(const AddOrder &);
+    void apply(const MarketEvent &);
     void cancel(OrderId);
     void modify(const ModifyOrder &);
     void clear() noexcept;

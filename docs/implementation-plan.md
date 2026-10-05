@@ -80,7 +80,7 @@ indexed cancellation without full scans; Debug/Release/ASan/UBSan pass.
 
 ## Stage 3 — Canonical events and deterministic replay
 
-**Dependency:** Stage 2. **Status:** planned.
+**Dependency:** Stage 2. **Status:** complete locally; Linux CI unexecuted.
 
 **Objective:** reconstruct known book states from validated fixtures.
 

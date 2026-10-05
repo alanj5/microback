@@ -85,3 +85,48 @@ claims. Unknown IDs and invalid/overflowing mutations are covered explicitly.
 
 Git: Stage 1 is `4063893`. Stage 2 is the focused book commit containing this report;
 no push possible: no configured remote. Next: canonical events and deterministic replay.
+
+## Stage 3 — Canonical events and deterministic replay (2026-10-05)
+
+Implemented canonical records/validation, owned in-memory and strict CSV EventSource,
+OrderBook event application, ReplayEngine, atomic snapshot protocol, replay statistics,
+fixture CLI, canonical fixture, integration/parser tests and `docs/data-format.md`.
+Strict global sequences and nondecreasing timestamps reject regressions; gaps are
+counted. Snapshot replacement retains the previous complete state until commit.
+L2 informational trade prints do not also subtract depth. Side denotes resting liquidity.
+Failure requires explicit reset. No client simulation/latency/strategies yet.
+
+Executed final validation, all passed:
+
+```sh
+export PATH=/Users/alanD/Desktop/Projects/.microback-tools/bin:$PATH
+cmake --build build/debug --parallel 4
+ctest --test-dir build/debug --output-on-failure
+cmake --build build/release --parallel 4
+ctest --test-dir build/release --output-on-failure
+cmake --build build/sanitize-llvm --parallel 4
+ctest --test-dir build/sanitize-llvm --output-on-failure
+python3 scripts/check_format.py
+/opt/homebrew/opt/llvm/bin/clang-tidy -p build/sanitize-llvm src/event.cpp src/replay_engine.cpp apps/replay.cpp tests/cpp/test_replay.cpp --quiet
+build/debug/microback_tests --reporter compact
+build/debug/microback_cli tests/fixtures/replay.csv
+git diff --check
+```
+
+16 CTest cases (15 Catch2 cases / 1,682 assertions plus CLI integration). Three CLI
+subprocess runs were compared byte-for-byte against the exact expected output:
+`events=9 snapshots=1 sequence_gaps=0`, `bid,100,8`, `ask,102,10`.
+CSV and in-memory final states/statistics match; missing-file CLI returns exit 1.
+All final static/style checks were clean. Debug/Release use Apple Clang 17; sanitizer
+build uses LLVM 23.1.2 as described in Stage 1. Linux CI is still unexecuted.
+
+Design decisions: explicit same-timestamp snapshot transaction with zero-ID markers
+because the specification's event record has no snapshot flags; validate complete
+snapshot before publication. Keep L2 print and depth-update effects separate to avoid
+subtracting a trade twice. Canonical adapters must honour these documented conventions.
+Real venue parsing, binary IO, client fills, no-look-ahead execution tests and fees are
+intentionally deferred according to the plan. Replay makes no execution realism claim.
+
+Git: Stage 2 is `8874eb3`; Stage 3 is the focused replay commit containing this report.
+Not pushed: `git remote -v` is empty. Next: Stage 4 latency-aware client execution,
+book walking and conservative/neutral/optimistic L2 queue models.
