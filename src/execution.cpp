@@ -153,6 +153,8 @@ void ExecutionEngine::fill(SimOrder &order, PriceTicks price, std::int64_t quant
     order.filled_quantity = QuantityLots{order.filled_quantity.value() + quantity};
     order.status =
         order.remaining_quantity.value() == 0 ? OrderStatus::Filled : OrderStatus::PartiallyFilled;
+    if (fill_callback_)
+        fill_callback_(record);
 }
 void ExecutionEngine::cancel_at_exchange(SimOrder &order) {
     if (terminal(order.status))
@@ -341,6 +343,19 @@ bool ExecutionEngine::on_market_event(const MarketEvent &event) {
         process_until(event.timestamp_ns, true);
         now_ = event.timestamp_ns;
         return true;
+    } catch (...) {
+        failed_ = true;
+        throw;
+    }
+}
+void ExecutionEngine::advance_to(Timestamp time) {
+    if (failed_ || loading_snapshot_)
+        throw std::logic_error("cannot advance failed/incomplete engine");
+    if (time < now_)
+        throw std::invalid_argument("clock regression");
+    try {
+        process_until(time, true);
+        now_ = time;
     } catch (...) {
         failed_ = true;
         throw;

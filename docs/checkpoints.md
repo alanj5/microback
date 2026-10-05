@@ -192,3 +192,15 @@ failure in an overflow test was fixed and the whole gate rerun. Long/short round
 partial closes, reversals, fees/rebates, exposure reservations and unchanged state on
 rejection are covered. Accounting/rounding and notional scope are in accounting-risk.md.
 No remote configured, so local commit only. Next: restricted Context and native strategies.
+
+## Stage 6 — Native strategy framework
+
+Previous commit `09bf73a`. Added restricted Context, start/event/fill/timer/end hooks,
+configurable imbalance and inventory-skewed maker, deterministic results/history.
+The exact gate `PATH=/Users/alanD/Desktop/Projects/.microback-tools/bin:/opt/homebrew/opt/llvm/bin:$PATH scripts/validate.sh` passed all 45 CTest cases in Debug/Release/ASan+UBSan and all
+style/static checks. Tests cover immutable book access, callback clock/position, timers,
+expected signals, inventory skew and identical complete results. An initial strategy
+test expected an impossible flatten fill after trades exhausted depth; the assertion
+now checks the actual cancellation and still verifies the generated sell decision.
+No venue/Python/future-label functionality was introduced. See strategies.md for tie
+semantics and cancellation policy. Local commit only: no remote. Next: Python package.

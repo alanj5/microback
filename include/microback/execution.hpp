@@ -3,6 +3,7 @@
 #include "microback/portfolio.hpp"
 #include "microback/replay_engine.hpp"
 #include "microback/risk.hpp"
+#include <functional>
 #include <map>
 #include <queue>
 #include <vector>
@@ -87,6 +88,7 @@ class ExecutionEngine {
     std::priority_queue<Action, std::vector<Action>, Later> actions_;
     std::map<LevelKey, std::int64_t> consumed_;
     std::map<LevelKey, std::int64_t> unreflected_trades_;
+    std::function<void(const Fill &)> fill_callback_;
     bool ready_ = false, failed_ = false, loading_snapshot_ = false;
     [[nodiscard]] Timestamp arrival();
     void schedule(OrderId, ActionKind, Timestamp);
@@ -110,6 +112,11 @@ class ExecutionEngine {
     void flush();
     bool on_market_event(const MarketEvent &);
     void run(EventSource &);
+    void finish() { replay_.finish(); }
+    void advance_to(Timestamp);
+    void set_fill_callback(std::function<void(const Fill &)> callback) {
+        fill_callback_ = std::move(callback);
+    }
     [[nodiscard]] const OrderBook &book() const noexcept { return replay_.book(); }
     [[nodiscard]] Timestamp now() const noexcept { return now_; }
     [[nodiscard]] const std::map<OrderId, SimOrder> &orders() const noexcept { return orders_; }

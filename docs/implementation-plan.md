@@ -150,7 +150,7 @@ cancel releases reservation, rejected orders leave financial state intact; exact
 
 ## Stage 6 — Strategy framework
 
-**Dependency:** Stage 5. **Status:** planned.
+**Dependency:** Stage 5. **Status:** complete locally; Linux CI unexecuted.
 
 **Objective:** deterministic native strategies through restricted engine APIs.
 
