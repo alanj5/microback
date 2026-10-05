@@ -1,0 +1,21 @@
+{
+  "venue": "Kraken",
+  "endpoint": "wss://ws.kraken.com/v2",
+  "symbol": "BTC/USD",
+  "depth": 10,
+  "tick": "0.1",
+  "lot": "0.00000001",
+  "started_utc": "2026-10-05T18:01:07.316333+00:00",
+  "ended_utc": "2026-10-05T18:03:18.131583+00:00",
+  "requested_seconds": 120,
+  "sha256": {
+    "kraken-btc-usd.jsonl": "67a0410f76f0f88acb1edf81561afb86ed386a0db6231e68601f69b4a00b2e13",
+    "kraken-btc-usd.csv": "6b7b4e4ec935e32a164127a8563ef028ba5063c7aa4654bb4d1406e11ae81ad2",
+    "kraken-btc-usd.mkt": "4d113bb4ea64137346d43404ee9fc394d8289920a2b194ed218968482dd08874"
+  },
+  "license_note": "Public API capture for local research; no redistribution license asserted. Raw files excluded from Git.",
+  "events": 11862,
+  "trade_sequence_gaps": 0,
+  "time_basis": "local receipt nanoseconds",
+  "checksum": "all book messages verified"
+}

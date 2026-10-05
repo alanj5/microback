@@ -1,78 +1,84 @@
-# Canonical events and CSV replay
+# Canonical data and venue normalization
 
-MarketEvent stores signed 64-bit nanosecond timestamps, integer ticks and lots,
-unsigned 64-bit sequence/order IDs, and one-byte type/side enums. The strongly typed
-wrappers preserve these representations. Decimal conversions belong to external
-adapters; the canonical CSV reader rejects fractional values. Instruments' tick/lot
-scales will be provided by adapter/configuration metadata in the data stage.
+Single venue/instrument, signed 64-bit nonnegative nanoseconds, positive integer
+price ticks/lots, unsigned 64-bit nonzero monotonic sequence. The canonical CSV
+header is `timestamp_ns,sequence,order_id,price_ticks,quantity_lots,type,side`.
+Types: Snapshot/Add/Modify/Cancel/Trade. Sides: Buy/Sell, indicating resting liquidity
+for Trade. See replay.md for transactional snapshot markers (ID 0 Buy begin/Sell end),
+absolute modifications, nonzero L3 trade IDs and informational ID 0 L2 prints.
+Event order is validated rather than silently sorted. Timestamp regression, duplicate/
+regressed sequence, missing snapshot, crossing, invalid domain values fail fast;
+sequence gaps are counted. Engine input cannot mix symbols.
 
-## CSV schema
+## Binary v1
 
-The header is exactly:
+All multibyte integers are explicitly little endian. No native struct padding.
+16-byte header: magic ASCII `MBACK001` (8), u16 version=1, u16 record size=48,
+u32 symbol_id=1. Each 48-byte record:
 
-```text
-timestamp_ns,sequence,order_id,price_ticks,quantity_lots,type,side
+| Offset | Type | Field |
+| --- | --- | --- |
+| 0 | u64 | timestamp_ns, limited to INT64_MAX |
+| 8 | u64 | sequence |
+| 16 | u64 | order_id |
+| 24 | i64 | price_ticks |
+| 32 | i64 | quantity_lots |
+| 40 | u8 | type: Snapshot=0, Add=1, Modify=2, Cancel=3, Trade=4 |
+| 41 | u8 | side: Buy=0, Sell=1 |
+| 42 | u16 | flags=0 |
+| 44 | u32 | symbol_id=1 |
+
+Unknown version, record size, flags, symbol, enum and partial final record fail.
+EOF at a record boundary is valid. External SHA256 detects whole-record data loss;
+framing itself cannot detect removal of an entire trailing record.
+`microback-convert input.csv output.mkt` validates the complete replay and writes via
+a temporary file, publishing only after successful finish/close. CLI/Python dispatch
+`.mkt` to binary, all other suffixes to CSV. Format contains no tick/lot metadata:
+retain the dataset manifest, which defines units and provenance.
+
+## Kraken v2 L2
+
+Adapter: `microback.adapters.kraken`, collector: `scripts/collect_kraken.py`.
+Uses public `wss://ws.kraken.com/v2`, BTC/USD depth 10, tick USD 0.1 and lot BTC
+0.00000001 in this capture. Decode JSON numbers as Decimal; conversion uses exact
+integer ratios and rejects misalignment, negative or overflowing units.
+Preserve decimal lexemes for CRC32, apply all sequential updates per message,
+truncate both sides to subscribed depth and verify every top-10 checksum. Obsolete
+levels generate cancellations before replacement additions; stable synthetic IDs
+identify aggregate side/price levels. These IDs do not identify exchange orders.
+
+Canonical time is **local UTC receipt ns**, clamped nondecreasing by collector;
+raw exchange timestamps remain in JSONL. Local sequence preserves received channel
+and message order; Kraken has no cross-channel book/trade sequence. This models the
+observed feed, including network delay, rather than claiming perfect matching-engine
+time. Trade IDs are checked for duplicates/regressions and gaps counted. No silent
+reconnection: errors fail collection/conversion; a new connection needs a fresh snapshot.
+Book checksum cannot certify relative ordering of the separate trade channel.
+Trades may be received after the matching book decrease; L2 execution consequently
+has feed-order uncertainty in addition to queue uncertainty.
+
+Official references: [book](https://docs.kraken.com/exchange/api-reference/spot-websocket-v2/book),
+[trade](https://docs.kraken.com/exchange/api-reference/spot-websocket-v2/trade),
+[checksum](https://docs.kraken.com/exchange/guides/websockets/book-checksum-v2).
+
+## Reproduce data
+
+```
+python -m pip install '.[data]'
+python scripts/collect_kraken.py data/raw/kraken-btc-usd.jsonl --seconds 120
+build/release/microback-convert data/raw/kraken-btc-usd.csv data/raw/kraken-btc-usd.mkt
+build/release/microback_cli data/raw/kraken-btc-usd.mkt
+python scripts/generate.py data/generated/small.csv
+python scripts/generate.py data/generated/1M.mkt --size 1M
+python scripts/generate.py data/generated/10M.mkt --size 10M
+python scripts/generate.py data/generated/100M.mkt --size 100M
 ```
 
-Type names: Snapshot, Add, Modify, Cancel, Trade. Side names: Buy, Sell. No whitespace,
-quoting, comments, extra fields or empty rows. LF and CRLF work. Integers must be in
-range, timestamps nonnegative, sequences nonzero. Failures include a row number.
-The file reader owns its stream; an istream constructor borrows a stream that must
-outlive the reader. Readers cannot be moved/copied because their stream pointer may
-refer to their own file member. InMemoryEventSource owns its event vector.
-
-## Snapshot transaction
-
-The specification's single canonical record has no snapshot-boundary flags. This
-implementation reserves zero order ID on Snapshot events for boundaries:
-
-- Snapshot, ID 0, price/quantity 0, Buy: begin replacement snapshot.
-- Snapshot, nonzero ID and positive price/quantity: one resting order/aggregate row.
-- Snapshot, ID 0, price/quantity 0, Sell: commit completed snapshot.
-
-The side on boundary markers is a documented control convention. All rows/markers
-of a snapshot must share one timestamp and have distinct increasing sequences.
-The replay engine builds the replacement in a separate book; its public book keeps
-the last complete state until commit. An invalid/truncated snapshot is never
-published. Empty snapshots are permitted. Nesting, unmatched boundaries, snapshot
-rows outside a transaction and incremental events inside one are rejected.
-`ingest` returns true only when a complete state is observable. Future strategy
-callbacks must only run on these published events.
-
-## Incremental semantics
-
-Add requires a new nonzero ID and positive price/quantity. Modify supplies absolute
-remaining quantity and price; the existing side must match. Cancel supplies existing
-ID and matching side with zero price/quantity. Zero quantity is not a modification.
-For L3-style trades, nonzero ID identifies the resting order: price/side must match,
-quantity cannot exceed remaining lots, and the fill reduces/removes the order.
-
-For L2 trade prints, Trade ID 0 is informational and does not change reconstructed
-depth; subsequent depth updates carry the changed quantities. Trade side identifies
-the resting liquidity side, so an aggressive buy is Sell. This convention prevents
-subtracting the same trade once as a print and again as a depth update. A later venue
-adapter must normalize its aggressor labels accordingly. L2 aggregate rows use stable
-synthetic IDs supplied by the adapter; order identity alone does not imply exact L3
-queue knowledge. Stage 3 reconstructs history; Stage 4 adds client fills under explicit L2 queue
-assumptions described in `execution-model.md`.
-
-## Validation and ordering
-
-Events must already be lexicographically ordered by (timestamp, sequence).
-Timestamps cannot decrease; sequences strictly increase globally within a replay,
-including equal-time events. Gaps are counted but permitted; they are not silently
-filled. Snapshot replacement does not reset sequencing. Explicit `ReplayEngine.reset`
-clears book, sequencing and counters and permits a new epoch. External adapters must
-handle venue resynchronization explicitly.
-
-Require a completed initial snapshot before incrementals. Unknown IDs, side mismatch,
-duplicate IDs, invalid enum/quantity/price, sequence/timestamp regressions and crossed
-books fail fast. Snapshot commits run full invariants. Incremental additions/price
-changes check the opposite best price before mutation; valid indexed operations
-maintain aggregates without a full-book scan. Tests check complete invariants after
-mutation sequences. On any replay/parser failure the engine is unusable until explicit
-reset, preserving the last complete snapshot or last accepted incremental state.
-Statistics report accepted events, committed snapshots and missing sequence values;
-replacement resets equal snapshots minus one. There is no lenient/drop mode yet.
-
-Binary replay is a future stage and is not implemented or claimed here.
+Raw/generated streams are ignored. The committed manifest records the actual
+120-second capture checksum, times, tick/lot units and gap/checksum validation.
+A live recollection produces a different stream; preserving the frozen local files
+is required to reproduce exact research numbers. Public access is not an asserted
+redistribution license: raw data stays local, and the only committed venue sample is
+three small book messages used for parser regression. Synthetic generator v1 is
+streaming and deterministic across Python versions, with manifest/seed/SHA256;
+1M and 10M were generated and validated locally. 100M is available but not timed.

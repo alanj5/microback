@@ -1,15 +1,16 @@
+#include "microback/binary.hpp"
 #include "microback/replay_engine.hpp"
 #include <exception>
 #include <iostream>
 int main(int argc, char **argv) {
     if (argc != 2) {
-        std::cerr << "usage: microback_cli canonical.csv\n";
+        std::cerr << "usage: microback_cli canonical.csv|canonical.mkt\n";
         return 2;
     }
     try {
-        microback::CsvEventSource source{std::string{argv[1]}};
+        auto source = microback::open_event_source(std::string{argv[1]});
         microback::ReplayEngine engine;
-        engine.run(source);
+        engine.run(*source);
         const auto &stats = engine.statistics();
         std::cout << "events=" << stats.events << " snapshots=" << stats.snapshots
                   << " sequence_gaps=" << stats.sequence_gaps << '\n';

@@ -219,3 +219,22 @@ arguments flagged by static analysis were fixed before the gate. Native values m
 the hand-calculated C++ fixture; huge Python integers survive exactly. Future test
 changes do not change the frozen training winner. Binary/real-data support remains
 Stage 8. Local focused commit; no configured remote. Next: data and binary replay.
+
+## Stage 8a — Venue data and binary replay (2026-10-05)
+
+Explicit little-endian binary reader/writer, validating converter, source dispatch,
+Kraken v2 CRC32/Decimal/depth adapter+collector and streaming small/1M/10M/100M
+synthetic generator. `scripts/validate.sh` passed 47 CTest cases in Debug/Release/
+ASan+UBSan, format and tidy; dedicated bindings tidy also passed. With the tool PATH,
+`pip install -e . --no-build-isolation`; tests were rerun in `/tmp/microback-clean`
+after macOS repeatedly marked the hidden tool-venv `.pth` file hidden (Python skips
+it). Visible clean venv editable install/import and `python -m pytest tests/python -q`
+passed all 7 tests. This environment issue is not a package workaround in source.
+`python scripts/collect_kraken.py data/raw/kraken-btc-usd.jsonl --seconds 120` captured
+11,862 events; all book checksums verified, no observed trade gaps. `microback-convert`
+and `microback_cli` replayed the full capture; Python full-result CSV/binary equality
+passed. `scripts/generate.py ... --size 1M` and `--size 10M` plus Release CLI replay
+validated 1M/10M events. Tiny captured fixture and exact byte/truncation/invalid binary
+cases pass. Source manifests in docs/datasets; raw/generated streams ignored.
+100M mode available but not executed. L2/cross-channel receipt-order limitations are
+explicit in data-format.md. Local commit only; no remote. Next: measured baseline.

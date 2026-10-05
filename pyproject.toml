@@ -9,6 +9,7 @@ requires-python = ">=3.10"
 dependencies = ["pandas>=2", "numpy>=1.26", "matplotlib>=3.8"]
 [project.optional-dependencies]
 test = ["pytest>=8"]
+data = ["websockets>=14,<17"]
 [tool.scikit-build]
 build-dir = "build/python"
 wheel.packages = ["python/microback"]

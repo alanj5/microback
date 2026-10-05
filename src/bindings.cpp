@@ -1,3 +1,4 @@
+#include "microback/binary.hpp"
 #include "microback/strategy.hpp"
 #include <algorithm>
 #include <limits>
@@ -96,11 +97,11 @@ py::dict run(const std::string &path, const py::dict &p, const std::string &name
         strategy = std::make_unique<MarketMaker>(mp);
     } else
         throw py::value_error("unknown strategy");
-    CsvEventSource source{path};
+    auto source = open_event_source(path);
     Result result;
     {
         py::gil_scoped_release release;
-        result = run_backtest(source, *strategy, cfg);
+        result = run_backtest(*source, *strategy, cfg);
     }
     py::list orders, fills, history, rejections;
     const char *statuses[] = {"pending", "active",    "partially_filled",

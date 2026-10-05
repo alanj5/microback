@@ -200,6 +200,8 @@ all deliverables while using synthetic fixtures for earlier Python verification.
 
 ### 8a — Venue data and binary replay
 
+**Status:** complete locally; real capture retained outside Git.
+
 **Deliverables:** one documented liquid crypto venue adapter/collector (Kraken-style
 L2 target), real captured dataset outside Git with provenance/checksum/license notes,
 exact decimal-to-tick/lot conversion, validation, deterministic generator with small,
