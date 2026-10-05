@@ -1,0 +1,18 @@
+[build-system]
+requires = ["scikit-build-core>=0.10,<2", "pybind11>=2.13,<4"]
+build-backend = "scikit_build_core.build"
+[project]
+name = "microback"
+version = "0.1.0"
+description = "Deterministic C++20 market microstructure research engine"
+requires-python = ">=3.10"
+dependencies = ["pandas>=2", "numpy>=1.26", "matplotlib>=3.8"]
+[project.optional-dependencies]
+test = ["pytest>=8"]
+[tool.scikit-build]
+build-dir = "build/python"
+wheel.packages = ["python/microback"]
+cmake.build-type = "Release"
+[tool.scikit-build.cmake.define]
+MICROBACK_PYTHON = "ON"
+BUILD_TESTING = "OFF"

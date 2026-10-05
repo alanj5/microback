@@ -9,6 +9,6 @@ for mode in debug release sanitize-llvm; do
 if command -v clang-tidy >/dev/null; then
   while IFS= read -r source; do
     clang-tidy -p build/sanitize-llvm "$source" --quiet --warnings-as-errors='*'
-  done < <(rg --files src tests/cpp apps -g '*.cpp')
+  done < <(rg --files src tests/cpp apps -g '*.cpp' -g '!bindings.cpp')
 fi
 git diff --check

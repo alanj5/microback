@@ -204,3 +204,18 @@ test expected an impossible flatten fill after trades exhausted depth; the asser
 now checks the actual cancellation and still verifies the generated sell decision.
 No venue/Python/future-label functionality was introduced. See strategies.md for tie
 semantics and cancellation policy. Local commit only: no remote. Next: Python package.
+
+## Stage 7 — Python research API (2026-10-05)
+
+Implemented pybind11/scikit-build-core package, Config/run/Result, exact money columns,
+DataFrames, plotting, Cartesian grids and disjoint past-only walk-forward. Commands
+with the tool PATH above: `scripts/validate.sh` (45 cases in each of three modes;
+format/static clean), `python -m pip install -e . --no-build-isolation`,
+`python -m pytest tests/python -q` (4 passed), `python examples/research.py`,
+`clang-tidy -p build/python src/bindings.cpp --quiet --warnings-as-errors='*'`,
+`python -m build --wheel --no-isolation`, then wheel install/import/run in the clean
+`/tmp/microback-clean` venv: all passed. A binding field typo and adjacent string
+arguments flagged by static analysis were fixed before the gate. Native values match
+the hand-calculated C++ fixture; huge Python integers survive exactly. Future test
+changes do not change the frozen training winner. Binary/real-data support remains
+Stage 8. Local focused commit; no configured remote. Next: data and binary replay.

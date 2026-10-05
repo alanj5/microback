@@ -171,7 +171,7 @@ two identical full runs produce identical results. Document execution assumption
 
 ## Stage 7 — Python research API
 
-**Dependency:** Stage 6. **Status:** planned.
+**Dependency:** Stage 6. **Status:** complete locally; Linux CI unexecuted.
 
 **Objective:** installable Python-driven complete native backtests.
 
