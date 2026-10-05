@@ -130,3 +130,53 @@ intentionally deferred according to the plan. Replay makes no execution realism 
 Git: Stage 2 is `8874eb3`; Stage 3 is the focused replay commit containing this report.
 Not pushed: `git remote -v` is empty. Next: Stage 4 latency-aware client execution,
 book walking and conservative/neutral/optimistic L2 queue models.
+
+## Stage 4 — Latency-aware execution simulation (2026-10-05)
+
+Implemented `execution.hpp` / `execution.cpp`, client lifecycle, deterministic arrival
+scheduler, ConstantLatency, market/crossing/passive limits, partial fills, GTC/IOC,
+latency-aware cancellation, per-fill maker/taker fees/rebates and three L2 queue models.
+`docs/execution-model.md` specifies event ties, snapshot continuity, liquidity overlay,
+integer fee representation and modelling limits. Decision/arrival mids are retained.
+
+Final validation commands (all passed):
+
+```sh
+export PATH=/Users/alanD/Desktop/Projects/.microback-tools/bin:$PATH
+cmake --build build/debug --parallel 4
+ctest --test-dir build/debug --output-on-failure
+cmake --build build/release --parallel 4
+ctest --test-dir build/release --output-on-failure
+cmake --build build/sanitize-llvm --parallel 4
+ctest --test-dir build/sanitize-llvm --output-on-failure
+python3 scripts/check_format.py
+/opt/homebrew/opt/llvm/bin/clang-tidy -p build/sanitize-llvm src/execution.cpp tests/cpp/test_execution.cpp --quiet
+build/debug/microback_tests --reporter compact
+git diff --check
+```
+
+35 CTest cases (34 Catch2 cases / 1,809 assertions plus fixture CLI integration).
+The adversarial latency test changes asks between decision and arrival: a market buy
+fills at 110, not stale 102; a limit capped at 102 remains unfilled. Arrival between
+external events uses only the old state at its actual timestamp. Trade-at-arrival,
+cancellation latency, passive FIFO and repeated full runs are tested. L2 trade prints
+cannot supply stale taker liquidity or double-count subsequent depth decreases.
+
+Review corrected two overlay/queue rules before committing: growth must increase
+available liquidity only once, and neutral cancellation uses the pool after previously
+observed trades. Regression tests cover both. An initial test build had a Catch2 macro
+parenthesis error; corrected and rerun. An initial LLVM tidy invocation against Apple's
+compilation database failed to resolve standard headers; final analysis used the LLVM
+build database. Final compiler/style/static checks had no diagnostics.
+
+Design: historical reconstruction is immutable to clients; separate liquidity overlay
+prevents reuse of consumed lots. Passive queues are explicitly approximate, even for
+records with historical IDs; no exact L3 mode claim. Snapshot replacement cancels
+resting clients rather than inventing continuity. Pending actions beyond final data
+remain pending. Signed integer ppm fees are exact in millionths of tick*lot with
+128-bit intermediates; per-fill tick*lot notional overflow fails explicitly.
+
+Portfolio/PnL, submission risk limits/rejection records, strategies, bindings, real
+venue data, binary replay, profiling/benchmarks and research remain later stages.
+Git: Stage 3 is `d1d0d5f`; Stage 4 is the focused execution commit containing this report.
+Not pushed: no configured remote. Next: Stage 5 portfolio accounting and risk controls.

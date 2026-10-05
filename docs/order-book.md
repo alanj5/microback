@@ -36,4 +36,4 @@ index/node identity, no empty levels and an uncrossed spread. Low-level add does
 match or reject a crossed book: callers can inspect `valid()` after an atomic update.
 Replay rejects invalid reconstructed states at its event boundary. Canonical trade
 application and atomic snapshots were added in Stage 3; client matching/execution
-belong to Stage 4. See `data-format.md` for event semantics.
+were added in Stage 4. See `data-format.md` for event semantics.

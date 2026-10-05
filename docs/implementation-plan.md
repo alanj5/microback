@@ -102,7 +102,7 @@ fixture final state known exactly; repeated replay outputs byte-identical; all g
 
 ## Stage 4 — Latency-aware execution
 
-**Dependency:** Stage 3. **Status:** planned.
+**Dependency:** Stage 3. **Status:** complete locally; Linux CI unexecuted.
 
 **Objective:** hypothetical client orders execute only at exchange arrival.
 

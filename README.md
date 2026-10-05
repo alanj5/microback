@@ -5,10 +5,11 @@ planned Python research layer. The project studies execution latency, queue unce
 and transaction costs using market events. Profitability is not the success criterion.
 
 Development follows gated vertical stages in [the implementation plan](docs/implementation-plan.md).
-Currently Stages 1–3 provide the build, domain primitives, tests, CI and a FIFO limit
+Currently Stages 1–4 provide the build, domain primitives, tests, CI and a FIFO limit
 order book with indexed cancellations, depth, midpoint, microprice, imbalance and VWAP.
-Canonical CSV/in-memory replay and a fixture CLI also work. Client execution is not
-implemented yet. No throughput or research claims are made.
+Canonical CSV/in-memory replay, a fixture CLI and a latency-aware execution API also
+work. Execution covers market/limit orders, GTC/IOC, partial fills, fees/rebates and
+three L2 queue models. Portfolio, strategies and the Python layer remain planned. No throughput or research claims are made.
 
 ## Build and test
 
@@ -61,5 +62,5 @@ ask,102,10
 ```
 
 See [canonical data and snapshot semantics](docs/data-format.md). Replay is sequential,
-strictly validated and deterministic. Client orders, latency, portfolio and strategies
-remain later stages.
+strictly validated and deterministic. Portfolio and strategies remain later stages. See the precise
+[execution assumptions](docs/execution-model.md) before using the C++ execution API.

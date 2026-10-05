@@ -53,7 +53,8 @@ the resting liquidity side, so an aggressive buy is Sell. This convention preven
 subtracting the same trade once as a print and again as a depth update. A later venue
 adapter must normalize its aggressor labels accordingly. L2 aggregate rows use stable
 synthetic IDs supplied by the adapter; order identity alone does not imply exact L3
-queue knowledge. No client fills or queue-position claims exist in Stage 3.
+queue knowledge. Stage 3 reconstructs history; Stage 4 adds client fills under explicit L2 queue
+assumptions described in `execution-model.md`.
 
 ## Validation and ordering
 
