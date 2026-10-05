@@ -32,7 +32,7 @@ Follow these rules throughout the project:
    - configuration;
    - strategy;
    - random seed;
-   
+
    a simulation must produce identical results.
 
 4. **Preserve strict causal ordering and prevent look-ahead bias.**

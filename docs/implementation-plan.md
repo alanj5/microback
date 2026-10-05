@@ -32,7 +32,7 @@ claimed if supported by the chosen dataset and fully tested.
 
 ## Stage 1 — Foundation and domain types
 
-**Dependency:** inspection and this checked plan. **Status:** planned.
+**Dependency:** inspection and this checked plan. **Status:** complete locally; Linux CI unexecuted.
 
 **Objective:** a clean C++20 project that builds and tests without simulation.
 

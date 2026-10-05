@@ -1,0 +1,3 @@
+InheritParentConfig: true
+Checks: '-bugprone-throwing-static-initialization'
+# Catch2 registration macros intentionally construct static registrars.
