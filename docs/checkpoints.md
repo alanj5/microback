@@ -50,3 +50,38 @@ CI checks were configured but could not be run locally; `/usr/bin/g++` is Apple 
 Git: focused foundation commit (identified by this stage's commit in `git log`);
 not pushed because `git remote -v` is empty. Repository is healthy locally.
 Next: Stage 2 price-time-priority limit order book.
+
+## Stage 2 — Price-time-priority order book (2026-10-05)
+
+Implemented `order_book.hpp` / `order_book.cpp`, deterministic book tests and
+`docs/order-book.md`. Chosen baseline: maps, FIFO lists and indexed locations;
+quantity increases reset priority, decreases retain it. Price changes splice to
+an allocated/validated destination before modifying the original level. Optional
+empty metrics, exact half-tick midpoint and documented floored VWAP/microprice.
+128-bit integer intermediates protect weighted averages. No matching/replay yet.
+
+Executed final validation, all passed:
+
+```sh
+export PATH=/Users/alanD/Desktop/Projects/.microback-tools/bin:$PATH
+cmake --build build/debug --parallel 4
+ctest --test-dir build/debug --output-on-failure
+cmake --build build/release --parallel 4
+ctest --test-dir build/release --output-on-failure
+cmake --build build/sanitize-llvm --parallel 4
+ctest --test-dir build/sanitize-llvm --output-on-failure
+python3 scripts/check_format.py
+/opt/homebrew/opt/llvm/bin/clang-tidy -p build/sanitize-llvm src/order_book.cpp tests/cpp/test_order_book.cpp --quiet
+build/debug/microback_tests --reporter compact
+git diff --check
+```
+
+9 test cases / 1,604 assertions, including 1,500 seeded invariant checks. Compiler
+warnings are errors; final static analysis had no diagnostics. An initial tidy
+invocation used a stale compilation database and failed to resolve includes;
+rerun after CMake regenerated the database, then corrected optional access diagnostics.
+The deterministic seed has a targeted lint exemption. No optimisations or performance
+claims. Unknown IDs and invalid/overflowing mutations are covered explicitly.
+
+Git: Stage 1 is `4063893`. Stage 2 is the focused book commit containing this report;
+no push possible: no configured remote. Next: canonical events and deterministic replay.

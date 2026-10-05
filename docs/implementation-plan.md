@@ -57,7 +57,7 @@ format check passes. GCC validation occurs in CI and must not be reported as run
 
 ## Stage 2 — Price-time-priority book
 
-**Dependency:** Stage 1. **Status:** planned.
+**Dependency:** Stage 1. **Status:** complete locally; Linux CI unexecuted.
 
 **Objective:** correct independently usable order-level book and derived state.
 

@@ -5,8 +5,9 @@ planned Python research layer. The project studies execution latency, queue unce
 and transaction costs using market events. Profitability is not the success criterion.
 
 Development follows gated vertical stages in [the implementation plan](docs/implementation-plan.md).
-Currently Stage 1 provides the build, domain primitives, tests and CI; simulation is not
-implemented yet. No throughput or research claims are made.
+Currently Stages 1–2 provide the build, domain primitives, tests, CI and a FIFO limit
+order book with indexed cancellations, depth, midpoint, microprice, imbalance and VWAP.
+Replay and client execution are not implemented yet. No throughput or research claims are made.
 
 ## Build and test
 
@@ -29,6 +30,7 @@ python3 scripts/check_format.py
 Install `clang-format==23.1.2` to run the style check. GCC/Clang Debug/Release and
 ASan/UBSan are configured in Ubuntu CI; local validation is recorded in
 [checkpoints](docs/checkpoints.md). The current development machine uses Apple Clang.
+See [book semantics](docs/order-book.md) for mutation, validation and rounding rules.
 Integer wrappers retain 64-bit ticks/lots/nanoseconds and IDs without implicit
 cross-domain conversion. Input validity belongs to the consuming operation.
 
