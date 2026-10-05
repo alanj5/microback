@@ -1,0 +1,149 @@
+Unable to determine clock rate from sysctl: hw.cpufrequency: No such file or directory
+This does not affect benchmark measurements, only the metadata output.
+***WARNING*** Failed to set thread affinity. Estimated CPU frequency may be incorrect.
+2026-10-05T19:11:43+01:00
+Running build/bench/microback_bench
+Run on (10 X 24 MHz CPU s)
+CPU Caches:
+  L1 Data 64 KiB
+  L1 Instruction 128 KiB
+  L2 Unified 4096 KiB (x10)
+Load Average: 2.23, 3.61, 4.33
+---------------------------------------------------------------------------------------
+Benchmark                             Time             CPU   Iterations UserCounters...
+---------------------------------------------------------------------------------------
+add                               46609 ns        46613 ns         5799 events_per_second=21.9681M/s items_per_second=21.9681M/s ns_per_event=45.5205s
+add                               47168 ns        47172 ns         5799 events_per_second=21.7077M/s items_per_second=21.7077M/s ns_per_event=46.0665s
+add                               46899 ns        46900 ns         5799 events_per_second=21.8337M/s items_per_second=21.8337M/s ns_per_event=45.8008s
+add                               46884 ns        46879 ns         5799 events_per_second=21.8434M/s items_per_second=21.8434M/s ns_per_event=45.7804s
+add                               46677 ns        46677 ns         5799 events_per_second=21.9382M/s items_per_second=21.9382M/s ns_per_event=45.5827s
+add_mean                          46847 ns        46848 ns            5 events_per_second=21.8582M/s items_per_second=21.8582M/s ns_per_event=45.7502s
+add_median                        46884 ns        46879 ns            5 events_per_second=21.8434M/s items_per_second=21.8434M/s ns_per_event=45.7804s
+add_stddev                          219 ns          220 ns            5 events_per_second=102.38k/s items_per_second=102.38k/s ns_per_event=0.214662s
+add_cv                             0.47 %          0.47 %             5 events_per_second=0.47% items_per_second=0.47% ns_per_event=0.47%
+cancel                            45398 ns        45397 ns         6163 events_per_second=22.5564M/s items_per_second=22.5564M/s ns_per_event=44.3334s
+cancel                            45356 ns        45355 ns         6163 events_per_second=22.5775M/s items_per_second=22.5775M/s ns_per_event=44.2919s
+cancel                            45401 ns        45404 ns         6163 events_per_second=22.5531M/s items_per_second=22.5531M/s ns_per_event=44.3397s
+cancel                            45394 ns        45389 ns         6163 events_per_second=22.5604M/s items_per_second=22.5604M/s ns_per_event=44.3254s
+cancel                            45273 ns        45276 ns         6163 events_per_second=22.6169M/s items_per_second=22.6169M/s ns_per_event=44.2147s
+cancel_mean                       45364 ns        45364 ns            5 events_per_second=22.5729M/s items_per_second=22.5729M/s ns_per_event=44.301s
+cancel_median                     45394 ns        45389 ns            5 events_per_second=22.5604M/s items_per_second=22.5604M/s ns_per_event=44.3254s
+cancel_stddev                      54.4 ns         52.9 ns            5 events_per_second=26.3555k/s items_per_second=26.3555k/s ns_per_event=0.0516658s
+cancel_cv                          0.12 %          0.12 %             5 events_per_second=0.12% items_per_second=0.12% ns_per_event=0.12%
+modify                             4.32 ns         4.32 ns     62695925 events_per_second=231.276M/s items_per_second=231.276M/s ns_per_event=4.32384s
+modify                             4.31 ns         4.31 ns     62695925 events_per_second=231.854M/s items_per_second=231.854M/s ns_per_event=4.31306s
+modify                             4.31 ns         4.31 ns     62695925 events_per_second=231.774M/s items_per_second=231.774M/s ns_per_event=4.31455s
+modify                             4.32 ns         4.32 ns     62695925 events_per_second=231.713M/s items_per_second=231.713M/s ns_per_event=4.31569s
+modify                             4.32 ns         4.32 ns     62695925 events_per_second=231.624M/s items_per_second=231.624M/s ns_per_event=4.31735s
+modify_mean                        4.32 ns         4.32 ns            5 events_per_second=231.648M/s items_per_second=231.648M/s ns_per_event=4.3169s
+modify_median                      4.32 ns         4.32 ns            5 events_per_second=231.713M/s items_per_second=231.713M/s ns_per_event=4.31569s
+modify_stddev                     0.004 ns        0.004 ns            5 events_per_second=224.415k/s items_per_second=224.415k/s ns_per_event=4.18573ms
+modify_cv                          0.10 %          0.10 %             5 events_per_second=0.10% items_per_second=0.10% ns_per_event=0.10%
+best                               2.40 ns         2.40 ns    116890707 events_per_second=417.136M/s items_per_second=417.136M/s ns_per_event=2.3973s
+best                               2.40 ns         2.40 ns    116890707 events_per_second=417.258M/s items_per_second=417.258M/s ns_per_event=2.3966s
+best                               2.40 ns         2.40 ns    116890707 events_per_second=416.383M/s items_per_second=416.383M/s ns_per_event=2.40164s
+best                               2.40 ns         2.40 ns    116890707 events_per_second=416.767M/s items_per_second=416.767M/s ns_per_event=2.39942s
+best                               2.40 ns         2.40 ns    116890707 events_per_second=416.531M/s items_per_second=416.531M/s ns_per_event=2.40078s
+best_mean                          2.40 ns         2.40 ns            5 events_per_second=416.815M/s items_per_second=416.815M/s ns_per_event=2.39915s
+best_median                        2.40 ns         2.40 ns            5 events_per_second=416.767M/s items_per_second=416.767M/s ns_per_event=2.39942s
+best_stddev                       0.002 ns        0.002 ns            5 events_per_second=377.24k/s items_per_second=377.24k/s ns_per_event=2.17121ms
+best_cv                            0.09 %          0.09 %             5 events_per_second=0.09% items_per_second=0.09% ns_per_event=0.09%
+trade                              11.6 ns         11.6 ns     24191110 events_per_second=86.1531M/s items_per_second=86.1531M/s ns_per_event=11.6072s
+trade                              11.7 ns         11.7 ns     24191110 events_per_second=85.6902M/s items_per_second=85.6902M/s ns_per_event=11.6699s
+trade                              11.6 ns         11.6 ns     24191110 events_per_second=85.8757M/s items_per_second=85.8757M/s ns_per_event=11.6447s
+trade                              11.6 ns         11.6 ns     24191110 events_per_second=85.8507M/s items_per_second=85.8507M/s ns_per_event=11.6481s
+trade                              11.4 ns         11.4 ns     24191110 events_per_second=87.5718M/s items_per_second=87.5718M/s ns_per_event=11.4192s
+trade_mean                         11.6 ns         11.6 ns            5 events_per_second=86.2283M/s items_per_second=86.2283M/s ns_per_event=11.5978s
+trade_median                       11.6 ns         11.6 ns            5 events_per_second=85.8757M/s items_per_second=85.8757M/s ns_per_event=11.6447s
+trade_stddev                      0.098 ns        0.102 ns            5 events_per_second=769.283k/s items_per_second=769.283k/s ns_per_event=0.102383s
+trade_cv                           0.84 %          0.88 %             5 events_per_second=0.89% items_per_second=0.89% ns_per_event=0.88%
+walk                                288 ns          288 ns       965484 events_per_second=3.46872M/s items_per_second=3.46872M/s ns_per_event=288.291s
+walk                                289 ns          289 ns       965484 events_per_second=3.46116M/s items_per_second=3.46116M/s ns_per_event=288.92s
+walk                                289 ns          289 ns       965484 events_per_second=3.46151M/s items_per_second=3.46151M/s ns_per_event=288.891s
+walk                                289 ns          289 ns       965484 events_per_second=3.46361M/s items_per_second=3.46361M/s ns_per_event=288.716s
+walk                                288 ns          288 ns       965484 events_per_second=3.46668M/s items_per_second=3.46668M/s ns_per_event=288.461s
+walk_mean                           289 ns          289 ns            5 events_per_second=3.46434M/s items_per_second=3.46434M/s ns_per_event=288.656s
+walk_median                         289 ns          289 ns            5 events_per_second=3.46361M/s items_per_second=3.46361M/s ns_per_event=288.716s
+walk_stddev                       0.274 ns        0.274 ns            5 events_per_second=3.29122k/s items_per_second=3.29122k/s ns_per_event=0.274155s
+walk_cv                            0.10 %          0.09 %             5 events_per_second=0.10% items_per_second=0.10% ns_per_event=0.09%
+crossing_walk                      9989 ns         9987 ns        27934 events_per_second=100.129k/s items_per_second=100.129k/s ns_per_event=9.98715ks
+crossing_walk                      9990 ns         9996 ns        27934 events_per_second=100.037k/s items_per_second=100.037k/s ns_per_event=9.99631ks
+crossing_walk                     10082 ns        10085 ns        27934 events_per_second=99.1531k/s items_per_second=99.1531k/s ns_per_event=10.0854ks
+crossing_walk                      9986 ns         9991 ns        27934 events_per_second=100.088k/s items_per_second=100.088k/s ns_per_event=9.99119ks
+crossing_walk                      9937 ns         9938 ns        27934 events_per_second=100.619k/s items_per_second=100.619k/s ns_per_event=9.9385ks
+crossing_walk_mean                 9997 ns        10000 ns            5 events_per_second=100.005k/s items_per_second=100.005k/s ns_per_event=9.99971ks
+crossing_walk_median               9989 ns         9991 ns            5 events_per_second=100.088k/s items_per_second=100.088k/s ns_per_event=9.99119ks
+crossing_walk_stddev               52.5 ns         53.2 ns            5 events_per_second=530.514/s items_per_second=530.514/s ns_per_event=53.2312s
+crossing_walk_cv                   0.53 %          0.53 %             5 events_per_second=0.53% items_per_second=0.53% ns_per_event=0.53%
+replay/1000000                     22.0 ms         22.0 ms           12 events_per_second=45.4837M/s items_per_second=45.4837M/s ns_per_event=21.9859s
+replay/1000000                     21.6 ms         21.6 ms           12 events_per_second=46.3998M/s items_per_second=46.3998M/s ns_per_event=21.5518s
+replay/1000000                     21.5 ms         21.5 ms           12 events_per_second=46.4531M/s items_per_second=46.4531M/s ns_per_event=21.5271s
+replay/1000000                     21.5 ms         21.5 ms           12 events_per_second=46.4828M/s items_per_second=46.4828M/s ns_per_event=21.5133s
+replay/1000000                     21.5 ms         21.5 ms           12 events_per_second=46.4332M/s items_per_second=46.4332M/s ns_per_event=21.5363s
+replay/1000000_mean                21.6 ms         21.6 ms            5 events_per_second=46.2505M/s items_per_second=46.2505M/s ns_per_event=21.6229s
+replay/1000000_median              21.5 ms         21.5 ms            5 events_per_second=46.4332M/s items_per_second=46.4332M/s ns_per_event=21.5363s
+replay/1000000_stddev             0.204 ms        0.203 ms            5 events_per_second=429.738k/s items_per_second=429.738k/s ns_per_event=0.203415s
+replay/1000000_cv                  0.94 %          0.94 %             5 events_per_second=0.93% items_per_second=0.93% ns_per_event=0.94%
+replay/10000000                     272 ms          272 ms            1 events_per_second=36.7554M/s items_per_second=36.7554M/s ns_per_event=27.2069s
+replay/10000000                     214 ms          214 ms            1 events_per_second=46.7856M/s items_per_second=46.7856M/s ns_per_event=21.3741s
+replay/10000000                     213 ms          213 ms            1 events_per_second=46.876M/s items_per_second=46.876M/s ns_per_event=21.3329s
+replay/10000000                     222 ms          222 ms            1 events_per_second=44.9897M/s items_per_second=44.9897M/s ns_per_event=22.2273s
+replay/10000000                     228 ms          228 ms            1 events_per_second=43.9188M/s items_per_second=43.9188M/s ns_per_event=22.7693s
+replay/10000000_mean                230 ms          230 ms            5 events_per_second=43.8651M/s items_per_second=43.8651M/s ns_per_event=22.9821s
+replay/10000000_median              222 ms          222 ms            5 events_per_second=44.9897M/s items_per_second=44.9897M/s ns_per_event=22.2273s
+replay/10000000_stddev             24.4 ms         24.4 ms            5 events_per_second=4.16564M/s items_per_second=4.16564M/s ns_per_event=2.4377s
+replay/10000000_cv                10.61 %         10.61 %             5 events_per_second=9.50% items_per_second=9.50% ns_per_event=10.61%
+execution/1000000/10                465 ms          465 ms            1 events_per_second=2.15156M/s items_per_second=2.15156M/s ns_per_event=464.778s
+execution/1000000/10                461 ms          461 ms            1 events_per_second=2.1673M/s items_per_second=2.1673M/s ns_per_event=461.403s
+execution/1000000/10                463 ms          463 ms            1 events_per_second=2.15756M/s items_per_second=2.15756M/s ns_per_event=463.487s
+execution/1000000/10                467 ms          467 ms            1 events_per_second=2.13911M/s items_per_second=2.13911M/s ns_per_event=467.485s
+execution/1000000/10                454 ms          454 ms            1 events_per_second=2.20071M/s items_per_second=2.20071M/s ns_per_event=454.398s
+execution/1000000/10_mean           462 ms          462 ms            5 events_per_second=2.16325M/s items_per_second=2.16325M/s ns_per_event=462.31s
+execution/1000000/10_median         463 ms          463 ms            5 events_per_second=2.15756M/s items_per_second=2.15756M/s ns_per_event=463.487s
+execution/1000000/10_stddev        4.94 ms         4.94 ms            5 events_per_second=23.3015k/s items_per_second=23.3015k/s ns_per_event=4.94164s
+execution/1000000/10_cv            1.07 %          1.07 %             5 events_per_second=1.08% items_per_second=1.08% ns_per_event=1.07%
+execution/1000000/100              1173 ms         1172 ms            1 events_per_second=852.886k/s items_per_second=852.886k/s ns_per_event=1.17249ks
+execution/1000000/100              1158 ms         1158 ms            1 events_per_second=863.5k/s items_per_second=863.5k/s ns_per_event=1.15808ks
+execution/1000000/100              1174 ms         1174 ms            1 events_per_second=851.592k/s items_per_second=851.592k/s ns_per_event=1.17427ks
+execution/1000000/100              1164 ms         1164 ms            1 events_per_second=858.907k/s items_per_second=858.907k/s ns_per_event=1.16427ks
+execution/1000000/100              1161 ms         1161 ms            1 events_per_second=861.068k/s items_per_second=861.068k/s ns_per_event=1.16135ks
+execution/1000000/100_mean         1166 ms         1166 ms            5 events_per_second=857.591k/s items_per_second=857.591k/s ns_per_event=1.16609ks
+execution/1000000/100_median       1164 ms         1164 ms            5 events_per_second=858.907k/s items_per_second=858.907k/s ns_per_event=1.16427ks
+execution/1000000/100_stddev       7.00 ms         7.03 ms            5 events_per_second=5.16888k/s items_per_second=5.16888k/s ns_per_event=7.03371s
+execution/1000000/100_cv           0.60 %          0.60 %             5 events_per_second=0.60% items_per_second=0.60% ns_per_event=0.60%
+csv/1000000                         237 ms          236 ms            1 events_per_second=4.23347M/s items_per_second=4.23347M/s ns_per_event=236.213s
+csv/1000000                         233 ms          232 ms            1 events_per_second=4.3091M/s items_per_second=4.3091M/s ns_per_event=232.067s
+csv/1000000                         229 ms          228 ms            1 events_per_second=4.37694M/s items_per_second=4.37694M/s ns_per_event=228.47s
+csv/1000000                         231 ms          231 ms            1 events_per_second=4.33413M/s items_per_second=4.33413M/s ns_per_event=230.727s
+csv/1000000                         230 ms          230 ms            1 events_per_second=4.34681M/s items_per_second=4.34681M/s ns_per_event=230.054s
+csv/1000000_mean                    232 ms          232 ms            5 events_per_second=4.32009M/s items_per_second=4.32009M/s ns_per_event=231.506s
+csv/1000000_median                  231 ms          231 ms            5 events_per_second=4.33413M/s items_per_second=4.33413M/s ns_per_event=230.727s
+csv/1000000_stddev                 3.34 ms         2.93 ms            5 events_per_second=54.2384k/s items_per_second=54.2384k/s ns_per_event=2.9327s
+csv/1000000_cv                     1.44 %          1.27 %             5 events_per_second=1.26% items_per_second=1.26% ns_per_event=1.27%
+csv/10000000                       2339 ms         2337 ms            1 events_per_second=4.27893M/s items_per_second=4.27893M/s ns_per_event=233.703s
+csv/10000000                       2347 ms         2346 ms            1 events_per_second=4.26292M/s items_per_second=4.26292M/s ns_per_event=234.581s
+csv/10000000                       2353 ms         2352 ms            1 events_per_second=4.25173M/s items_per_second=4.25173M/s ns_per_event=235.199s
+csv/10000000                       2336 ms         2335 ms            1 events_per_second=4.28265M/s items_per_second=4.28265M/s ns_per_event=233.5s
+csv/10000000                       2319 ms         2319 ms            1 events_per_second=4.31271M/s items_per_second=4.31271M/s ns_per_event=231.873s
+csv/10000000_mean                  2339 ms         2338 ms            5 events_per_second=4.27779M/s items_per_second=4.27779M/s ns_per_event=233.771s
+csv/10000000_median                2339 ms         2337 ms            5 events_per_second=4.27893M/s items_per_second=4.27893M/s ns_per_event=233.703s
+csv/10000000_stddev                12.8 ms         12.6 ms            5 events_per_second=23.1563k/s items_per_second=23.1563k/s ns_per_event=1.26249s
+csv/10000000_cv                    0.55 %          0.54 %             5 events_per_second=0.54% items_per_second=0.54% ns_per_event=0.54%
+binary/1000000                     62.5 ms         62.4 ms            4 events_per_second=16.0135M/s items_per_second=16.0135M/s ns_per_event=62.4475s
+binary/1000000                     61.8 ms         61.8 ms            4 events_per_second=16.1864M/s items_per_second=16.1864M/s ns_per_event=61.7802s
+binary/1000000                     63.3 ms         63.2 ms            4 events_per_second=15.8117M/s items_per_second=15.8117M/s ns_per_event=63.2445s
+binary/1000000                     62.9 ms         62.9 ms            4 events_per_second=15.9025M/s items_per_second=15.9025M/s ns_per_event=62.8832s
+binary/1000000                     61.9 ms         61.9 ms            4 events_per_second=16.1428M/s items_per_second=16.1428M/s ns_per_event=61.9472s
+binary/1000000_mean                62.5 ms         62.5 ms            5 events_per_second=16.0114M/s items_per_second=16.0114M/s ns_per_event=62.4605s
+binary/1000000_median              62.5 ms         62.4 ms            5 events_per_second=16.0135M/s items_per_second=16.0135M/s ns_per_event=62.4475s
+binary/1000000_stddev             0.632 ms        0.616 ms            5 events_per_second=157.836k/s items_per_second=157.836k/s ns_per_event=0.616382s
+binary/1000000_cv                  1.01 %          0.99 %             5 events_per_second=0.99% items_per_second=0.99% ns_per_event=0.99%
+binary/10000000                     704 ms          690 ms            1 events_per_second=14.5009M/s items_per_second=14.5009M/s ns_per_event=68.961s
+binary/10000000                     639 ms          638 ms            1 events_per_second=15.6706M/s items_per_second=15.6706M/s ns_per_event=63.8136s
+binary/10000000                     634 ms          634 ms            1 events_per_second=15.7812M/s items_per_second=15.7812M/s ns_per_event=63.3666s
+binary/10000000                     630 ms          630 ms            1 events_per_second=15.8846M/s items_per_second=15.8846M/s ns_per_event=62.954s
+binary/10000000                     638 ms          637 ms            1 events_per_second=15.6957M/s items_per_second=15.6957M/s ns_per_event=63.7119s
+binary/10000000_mean                649 ms          646 ms            5 events_per_second=15.5066M/s items_per_second=15.5066M/s ns_per_event=64.5614s
+binary/10000000_median              638 ms          637 ms            5 events_per_second=15.6957M/s items_per_second=15.6957M/s ns_per_event=63.7119s
+binary/10000000_stddev             31.1 ms         24.8 ms            5 events_per_second=568.391k/s items_per_second=568.391k/s ns_per_event=2.48237s
+binary/10000000_cv                 4.79 %          3.84 %             5 events_per_second=3.67% items_per_second=3.67% ns_per_event=3.84%

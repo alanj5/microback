@@ -58,3 +58,21 @@ endif()
 
 add_executable(microback-convert apps/convert.cpp)
 target_link_libraries(microback-convert PRIVATE microback_core)
+
+option(MICROBACK_BENCHMARKS "Build Google Benchmark suite" OFF)
+if(MICROBACK_BENCHMARKS)
+  include(FetchContent)
+  set(BENCHMARK_ENABLE_WERROR OFF CACHE BOOL "" FORCE)
+  set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+  set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+  FetchContent_Declare(googlebenchmark GIT_REPOSITORY https://github.com/google/benchmark.git
+                      GIT_TAG v1.9.4 GIT_SHALLOW TRUE)
+  FetchContent_MakeAvailable(googlebenchmark)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 23)
+    # v1.9.4 uses __COUNTER__ under -pedantic-errors; Clang 23 newly diagnoses it.
+    target_compile_options(benchmark PRIVATE -Wno-c2y-extensions)
+    target_compile_options(benchmark_main PRIVATE -Wno-c2y-extensions)
+  endif()
+  add_executable(microback_bench benchmarks/bench.cpp)
+  target_link_libraries(microback_bench PRIVATE microback_core benchmark::benchmark)
+endif()

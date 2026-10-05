@@ -220,6 +220,8 @@ instructions; large generated stream validates without committing it.
 
 ### 8b — Benchmark baseline and profiling
 
+**Status:** complete locally with macOS sample; Linux counters unavailable.
+
 **Deliverables:** Google Benchmark add/cancel/modify/best prices/trade/book walking/
 1M and 10M replay; CSV vs binary; benchmark smoke CI; profile.sh for Linux perf stat/
 record/report; retain repeated run outputs with CPU/RAM/OS/compiler/version/flags/

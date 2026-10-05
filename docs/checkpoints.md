@@ -238,3 +238,23 @@ validated 1M/10M events. Tiny captured fixture and exact byte/truncation/invalid
 cases pass. Source manifests in docs/datasets; raw/generated streams ignored.
 100M mode available but not executed. L2/cross-channel receipt-order limitations are
 explicit in data-format.md. Local commit only; no remote. Next: measured baseline.
+
+## Stage 8b — Baseline and profiling (2026-10-05)
+
+Google Benchmark covers add/cancel/modify/best/trade/VWAP walk/actual crossing walk,
+1M/10M in-memory replay, 1M execution at 10/100 levels and identical CSV/binary file
+replay. CMake Release configure/build with MICROBACK_BENCHMARKS=ON passed after
+fixing Clang 23 compatibility in third-party __COUNTER__ diagnostics (only dependency
+targets) and using nonconst benchmark barrier values. `scripts/validate.sh` passed
+47 cases in each of Debug/Release/ASan+UBSan and static/style checks. Dedicated
+`clang-tidy -p build/bench benchmarks/bench.cpp --quiet --warnings-as-errors='*'`
+passed after strong workload arguments/widening fixes and a documented suppression
+of Google's deliberate static registration macro. YAML/style/diff checks passed.
+`python scripts/benchmark.py docs/benchmarks/baseline --repetitions 5` and
+`scripts/profile.sh docs/benchmarks/baseline/profile` executed successfully. Raw
+results, repetitions/CV, machine/flags/compiler/commit/source+data hashes and sampled
+stacks are retained. Median execution/1M/100: 1164.27 ns/event; binary/10M: 63.71
+ns/event; CSV/10M: 233.70 ns/event. No Linux counters available on macOS; no invented
+IPC/cache claims. Profile identifies depth copying/allocations under execution.
+No core optimization yet. Local focused commit, no remote. Next: quantity lookup
+optimization justified by this baseline/profile, with repeated before/after gates.

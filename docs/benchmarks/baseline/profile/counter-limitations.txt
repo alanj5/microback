@@ -1,0 +1,1 @@
+Linux perf counters unavailable on macOS; sample is statistical stack profiling, not hardware counters.
