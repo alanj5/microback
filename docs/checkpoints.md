@@ -371,3 +371,59 @@ Next stage: none; the locally applicable plan is complete.
 
 All commits are local; no configured remote. The final SHA is available in git log
 and the completion response; this table avoids a self-referential commit hash.
+
+## GCC 13 optimized-build portability fix (2026-10-13)
+
+The first hosted run after origin was configured failed in GCC Release, Python
+wheel and benchmark-smoke, all at the same execution.cpp diagnostic:
+-Werror=maybe-uninitialized for the previous-order optional's side. Other matrix
+jobs were cancelled by fail-fast; hosted sanitizer/style jobs passed. The source
+optional was guarded before dereference, but GCC's optimized analysis reported the
+conditionally constructed payload. GCC 13.4 locally reproduced the exact diagnostic
+with the same -O3/-DNDEBUG/project warning flags.
+
+Changed the previous-order capture to an explicitly empty std::optional<Order>,
+then assignment only for nonzero historical IDs. Capture still precedes replay;
+ID-zero prints/markers still skip lookup, and missing IDs remain empty. Historical
+queue/cancellation/consumption logic is unchanged. No warning suppression, reduced
+optimization or relaxed -Werror. Existing snapshot, ID-zero trade, modification,
+cancellation and replenishment regressions exercise these paths.
+
+Commands executed from the repository root:
+
+```sh
+export PATH=/Users/alanD/Desktop/Projects/.microback-tools/bin:/opt/homebrew/opt/llvm/bin:$PATH
+/opt/homebrew/opt/gcc@13/bin/g++-13 -O3 -DNDEBUG -std=c++20 -fPIC -Wall -Wextra -Wconversion -Wsign-conversion -Wshadow -Werror -Iinclude -c src/execution.cpp -o /tmp/microback-execution-after.o
+cmake -S . -B build/gcc13-release -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/gcc@13/bin/g++-13 -DFETCHCONTENT_SOURCE_DIR_CATCH2="$PWD/build/debug/_deps/catch2-src" -DFETCHCONTENT_SOURCE_DIR_GOOGLEBENCHMARK="$PWD/build/bench/_deps/googlebenchmark-src" -DMICROBACK_BENCHMARKS=ON
+cmake --build build/gcc13-release --parallel 4
+ctest --test-dir build/gcc13-release --output-on-failure
+build/gcc13-release/microback_bench --benchmark_filter='^(add|cancel|modify|best|trade|walk)$' --benchmark_min_time=0.01s
+bash scripts/validate.sh
+CXX=/opt/homebrew/opt/gcc@13/bin/g++-13 MACOSX_DEPLOYMENT_TARGET=26.0 CMAKE_BUILD_PARALLEL_LEVEL=4 python -m build --wheel --no-isolation -Cbuild-dir='build/python-gcc/{wheel_tag}'
+python3 -m venv /tmp/microback-ci-validation
+/tmp/microback-ci-validation/bin/python -m pip install dist/*.whl pytest
+/tmp/microback-ci-validation/bin/python -m pytest tests/python -q
+/tmp/microback-ci-validation/bin/python examples/research.py
+/tmp/microback-ci-validation/bin/python scripts/research.py --synthetic-only --output output/ci-fix-research
+/tmp/microback-ci-validation/bin/python scripts/compare_native.py /Users/alanD/Desktop/Projects/.microback-tools/lib/python3.14/site-packages/microback/_core.cpython-314-darwin.so data/generated/small.csv data/raw/kraken-btc-usd.csv
+git diff --check
+```
+
+GCC 13 Release and existing Debug/Release/LLVM ASan+UBSan each passed all 52 CTest
+cases; format/static checks passed. GCC benchmark smoke and clean GCC-wheel
+installation/import passed, with 13 Python tests, the example and synthetic research.
+All 24 complete native results still match the preserved pre-optimization extension.
+GCC local validation is macOS arm64, not a substitute for the subsequent Ubuntu
+run. The before/after benchmark evidence remains historical and is not re-timed here.
+
+Tooling note: Homebrew poured GCC 13.4 successfully but its older brew client rejected
+the configure_gcc_runtime post-install step. Installed compiler/linker executables
+were exercised by all builds above. The native build emits a macOS assembler
+message about deployment-target overriding; no GCC project warning remains. The
+week-old /tmp wheel venv had lost its configuration/pip entry point, so a fresh
+visible venv was created rather than installing into the global interpreter.
+
+Git: focused `fix: avoid GCC 13 optional initialization warning` commit; push to
+origin/main and its Actions run provide hosted validation. The original failed run
+is https://github.com/alanj5/microback/actions/runs/38463448358. Node.js action
+runtime deprecation notices are nonfatal and unrelated to this compiler failure.

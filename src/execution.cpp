@@ -295,8 +295,9 @@ bool ExecutionEngine::on_market_event(const MarketEvent &event) {
             throw std::invalid_argument("event before execution clock");
         process_until(event.timestamp_ns, false);
         now_ = event.timestamp_ns;
-        const auto old =
-            event.order_id.value() == 0 ? std::optional<Order>{} : book().find(event.order_id);
+        std::optional<Order> old;
+        if (event.order_id.value() != 0)
+            old = book().find(event.order_id);
         const bool published = replay_.ingest(event);
         if (!published) {
             loading_snapshot_ = true;

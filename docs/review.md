@@ -64,7 +64,8 @@ Optional exact L3 client queue, stochastic latency, Python callbacks, custom lad
 concurrency and parser fuzzing are not claimed. No TSan need is introduced by the
 single-threaded implementation. Linux perf and GCC/Clang CI remain unexecuted on
 this macOS host; legitimate macOS stack sampling supplies profiler evidence. No
-configured Git remote exists, so commits remain local and CI cannot be dispatched.
+Git remote existed at the original review, so those commits initially remained local.
+Subsequent hosted CI results and compiler portability fixes are recorded in checkpoints.md.
 
 No stale TODO/FIXME/placeholder functions, secrets, raw large datasets or build
 artifacts are intentionally tracked. Reporting result/history copies remain a known

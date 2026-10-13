@@ -66,7 +66,8 @@ ctest --test-dir build/sanitize-llvm --output-on-failure
 
 52 CTest cases, 13 Python tests and package/research gates passed locally. GitHub Actions covers
 Ubuntu GCC/Clang Debug/Release, Clang sanitizers, format, Python wheel and benchmark
-smoke. CI cannot run until a remote is configured; Linux results are not claimed.
+smoke. Executed validation and CI follow-ups are recorded in
+[checkpoints](docs/checkpoints.md).
 `microback_cli events.csv` reconstructs the book; `microback-convert input.csv output.mkt`
 validates and writes portable 48-byte binary records. Generated streams support
 small, 1M, 10M and 100M modes (1M/10M generated/replayed locally).
