@@ -427,3 +427,26 @@ Git: focused `fix: avoid GCC 13 optional initialization warning` commit; push to
 origin/main and its Actions run provide hosted validation. The original failed run
 is https://github.com/alanj5/microback/actions/runs/38463448358. Node.js action
 runtime deprecation notices are nonfatal and unrelated to this compiler failure.
+
+
+## GitHub Actions runtime warning cleanup (2026-10-13)
+
+Hosted run 38477067019 for 2e65cbf completed successfully across all eight jobs:
+GCC/Clang Debug and Release, sanitizers, Python, formatting and benchmark smoke.
+Each job's only check annotation was the Node.js 20 action-runtime deprecation.
+Those notices concern CI dependencies, not the C++ or Python execution path.
+
+Updated checkout v4 to v7 and setup-python v5 to v7. Official latest releases are
+checkout v7.0.1 and setup-python v7.0.0; both major tags declare node24 in action.yml.
+The workflow uses GitHub-hosted Ubuntu runners and ordinary push/pull_request
+triggers, compatible with these action versions. Python stays at 3.12 and the
+build/test commands and compiler warning settings are unchanged.
+
+Validation: PyYAML parses all five job definitions and verifies six action uses
+(five checkout, one setup-python), all at v7; git diff --check passed. The prior
+all-green run is https://github.com/alanj5/microback/actions/runs/38477067019.
+Focused commit: `ci: update actions to Node.js 24 runtimes`; pushed to origin/main
+for full hosted verification of the workflow and warning annotations.
+
+Official references: https://github.com/actions/checkout/releases/tag/v7.0.1 and
+https://github.com/actions/setup-python/releases/tag/v7.0.0.
